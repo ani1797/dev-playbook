@@ -1,0 +1,60 @@
+---
+git_default_branch: main
+git_aliases:
+  a: add
+  b: branch
+  d: diff
+  s: status
+  f: fetch
+  p: pull
+  co: checkout
+  cob: checkout -b
+  ci: commit
+  st: status
+  ss: status -sb
+  lg: log --oneline --graph --all --decorate
+  df: diff
+  dc: diff --cached
+  pl: pull
+  ps: push
+  rb: rebase
+  amend: commit --amend
+  last: log -1 HEAD
+  lastd: log -1 HEAD --stat
+  ll: log --oneline
+  lol: log --graph --decorate --pretty=oneline --abbrev-commit --all
+  pf: push --force
+  fp: push --force
+  pfl: push --force-with-lease
+  can: commit --amend --no-edit
+  cam: commit --amend -m
+  cm: commit -m
+  unstage: restore --staged
+  rv: remote -v
+  cfg: config --list --global
+  rh: reset HEAD
+  rhh: reset --hard HEAD
+  rsh: reset --soft HEAD
+  sa: stash apply
+  sc: stash clear
+  sd: stash drop
+  sl: stash list
+  sp: stash pop
+  clean: git-lfs clean -- %f
+  prune: remote prune origin
+  # unstage: reset HEAD --
+  uncommit: reset --soft HEAD~
+  wip: "!git commit -m \"WIP\" && git push"
+git_toptal_ignore_templates:
+  - git
+  - windows
+  - linux
+  - macos
+  - xcode
+  - emacs
+  - vim
+  - direnv
+  - dotenv
+  - venv
+  - virtualenv
+git_toptal_url: https://www.toptal.com/developers/gitignore
