@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+{% if zsh_history_size is defined %}
+# Configure history size
+HISTSIZE={{ zsh_history_size }}
+SAVEHIST={{ zsh_history_size }}
+{% endif %}
+
+{% if zsh_history_file is defined %}
+# Configure history file location
+HISTFILE={{ zsh_history_file }}
+{% endif %}
+
+# ZSH options
+setopt APPEND_HISTORY # Append to the history file, don't overwrite it
+setopt INC_APPEND_HISTORY # Add commands to the history file immediately, not when the shell exits
+setopt HIST_IGNORE_DUPS # Don't record an entry that was just recorded again
+setopt SHARE_HISTORY # Share history between all sessions
+setopt EXTENDED_HISTORY # Save each command's start time and duration in the history file
+setopt NO_BEEP # Disable the beep sound
+setopt AUTO_CD # Change to a directory by typing its name
+setopt CD_ABLE_VARS # Allow changing to a directory by typing a variable name that contains the path to it
+setopt EXTENDED_GLOB # Enable extended globbing features like ** for recursive matching and ^ for negation in patterns
+
+{% if zsh_plugins_dir is defined %}
+# Load all plugins for zsh from the plugins directory
+for plugin in {{ zsh_plugins_dir }}/*.zsh; do
+  [[ -r $plugin ]] && source $plugin
+done
+{% endif %}

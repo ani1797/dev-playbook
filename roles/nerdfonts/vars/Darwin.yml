@@ -1,0 +1,5 @@
+# MacOS specific variables for Nerd Fonts installation
+---
+nerdfonts_install_path: "/Library/Fonts"
+nerdfonts_font_ext: "ttf"
+nerdfonts_temp_dir: "/tmp"

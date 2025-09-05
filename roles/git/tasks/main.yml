@@ -1,0 +1,30 @@
+---
+- name: Ensure git is installed
+  tags: install
+  become: true
+  ansible.builtin.package:
+    name: git
+    state: present
+- name: Verify git installation
+  tags: verify
+  ansible.builtin.command: git --version
+  register: git_version_output
+  changed_when: false
+- name: Display git version
+  tags: debug
+  ansible.builtin.debug:
+    var: git_version_output.stdout
+- name: Configure git user name
+  tags: config
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_username }}"
+  when: git_username is not none
+- name: Configure git user email
+  tags: config
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_email }}"
+  when: git_email is not none

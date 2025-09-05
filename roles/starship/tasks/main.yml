@@ -1,0 +1,50 @@
+---
+- name: Download the starship installscript.
+  tags: download
+  ansible.builtin.get_url:
+    url: "{{ starship_installer_url }}"
+    dest: /tmp/starship_install.sh
+    mode: '0755'
+- name: Install starship prompt
+  become: true
+  tags: install
+  ansible.builtin.command: /tmp/starship_install.sh -y --bin-dir "{{ starship_install_path }}"
+  args:
+    creates: "{{ starship_install_path }}/starship"
+  notify: Configure shell to use starship
+- name: Check for available theme presets
+  tags: info
+  register: starship_presets
+  changed_when: false
+  ansible.builtin.command: starship preset --list
+  when: starship_theme_preset is not none
+- name: Load the starship theme preset configuration
+  ansible.builtin.command: starship preset -o  "/tmp/starship_{{ starship_theme_preset }}" "{{ starship_theme_preset }}"
+  args:
+    creates: "/tmp/starship_{{ starship_theme_preset }}"
+  when:
+    - starship_theme_preset is not none
+    - starship_presets.stdout_lines is defined
+    - starship_theme_preset in starship_presets.stdout_lines
+- name: Apply the starship theme preset configuration
+  become: true
+  ansible.builtin.copy:
+    src: "/tmp/starship_{{ starship_theme_preset }}"
+    dest: "{{ starship_config_file }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0644'
+  when:
+    - starship_theme_preset is not none
+    - starship_presets.stdout_lines is defined
+    - starship_theme_preset in starship_presets.stdout_lines
+  notify: Reload starship prompt in the current shell
+- name: Warn if the specified starship theme preset is not available
+  ansible.builtin.debug:
+    msg: |
+      The specified starship theme preset '{{ starship_theme_preset }}' is not available.
+      Available presets are: {{ starship_presets.stdout_lines | join(', ') }}"
+  when:
+    - starship_theme_preset is not none
+    - starship_presets.stdout_lines is defined
+    - starship_theme_preset not in starship_presets.stdout_lines

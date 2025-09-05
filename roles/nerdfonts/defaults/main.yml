@@ -1,0 +1,5 @@
+---
+nerdfonts_owner: "ryanoasis"
+nerdfonts_repo: "nerd-fonts"
+nerdfonts_latest_release_url: "https://api.github.com/repos/{{ nerdfonts_owner }}/{{ nerdfonts_repo }}/releases/latest"
+nerdfonts_download_ext: "tar.xz"

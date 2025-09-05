@@ -1,0 +1,23 @@
+---
+- name: Reload starship prompt in the current shell
+  become: true
+  ansible.builtin.shell: exec "$SHELL" -l
+  args:
+    executable: /bin/bash
+  changed_when: false
+- name: Configure shell to use starship
+  become: true
+  ansible.builtin.blockinfile:
+    marker: "# {mark} starship configuration"
+    path: "{{ starship_shell_config_file }}"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # Starship prompt initialization
+      eval "$(starship init zsh)"
+      source <(starship completions zsh)
+  notify: Reload starship prompt in the current shell
+  args:
+    create: "{{ starship_shell_config_file }}"

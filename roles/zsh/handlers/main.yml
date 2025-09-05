@@ -1,0 +1,8 @@
+---
+- name: ZSH reload shell
+  become: true
+  ansible.builtin.shell: exec zsh -l
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: zsh_is_default | default(false)

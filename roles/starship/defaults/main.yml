@@ -1,0 +1,6 @@
+---
+starship_installer_url: "https://starship.rs/install.sh"
+starship_install_path: /usr/local/bin
+starship_config_file: "{{ ansible_env.HOME }}/.config/starship.toml"
+starship_shell_config_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/starship.zsh"
+starship_theme_preset: null

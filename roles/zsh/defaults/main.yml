@@ -1,0 +1,5 @@
+---
+zsh_is_default: true
+zsh_history_size: 100000
+zsh_history_file: "{{ ansible_env.HOME }}/.zsh_history"
+zsh_plugins_dir: "{{ ansible_env.HOME }}/.config/zsh/plugins"

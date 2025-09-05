@@ -1,0 +1,32 @@
+---
+- name: Extract the podman binary
+  tags: extract
+  ansible.builtin.unarchive:
+    src: "{{ podman_download_url }}"
+    dest: "/tmp"
+    remote_src: true
+    mode: '0755'
+  args:
+    creates: /tmp/bin/podman-remote-static-linux_amd64
+- name: Move the podman binary to the install path
+  tags: install
+  become: true
+  ansible.builtin.command: mv /tmp/bin/podman-remote-static-linux_amd64 {{ podman_install_path }}/podman
+  args:
+    creates: "{{ podman_install_path }}/podman"
+- name: Ensure the podman binary is executable
+  become: true
+  ansible.builtin.file:
+    path: "{{ podman_install_path }}/podman"
+    mode: '0755'
+    state: file
+  tags: permissions
+- name: Verify podman installation
+  tags: verify
+  ansible.builtin.command: "{{ podman_install_path }}/podman --version"
+  register: podman_version_output
+  changed_when: false
+- name: Display podman version
+  tags: verify
+  ansible.builtin.debug:
+    var: podman_version_output.stdout

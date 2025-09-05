@@ -1,0 +1,73 @@
+---
+- name: Check for the latest release version of Nerd Fonts
+  ansible.builtin.uri:
+    url: "{{ nerdfonts_latest_release_url }}"
+    return_content: true
+  register: nerdfonts_release_info
+- name: Set the Nerd Fonts version to the latest release if not specified
+  ansible.builtin.set_fact:
+    nerdfonts_version: "{{ nerdfonts_release_info.json.tag_name }}"
+- name: Loading OS specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+- name: Create a temporary directory for downloading Nerd Fonts
+  ansible.builtin.file:
+    path: "{{ nerdfonts_temp_dir }}/nerdfonts_{{ nerdfonts_version }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  register: nerdfonts_temp_dir_stat
+- name: "Download the required Nerd Fonts"
+  ansible.builtin.get_url:
+    url: "https://github.com/{{ nerdfonts_owner }}/{{ nerdfonts_repo }}/releases/download/{{ nerdfonts_version }}/{{ item }}.{{ nerdfonts_download_ext }}"
+    dest: "{{ nerdfonts_temp_dir_stat.path }}/{{ item }}.{{ nerdfonts_download_ext }}"
+    mode: '0644'
+    force: true
+  loop: "{{ nerdfonts_fonts }}"
+  loop_control:
+    label: "{{ item }}"
+  register: nerdfonts_download_results
+- name: Debug OS specific variables
+  ansible.builtin.debug:
+    var: nerdfonts_install_path
+- name: Ensure the fonts directory exists
+  ansible.builtin.file:
+    path: "{{ nerdfonts_install_path }}"
+    state: directory
+    mode: '0755'
+- name: Unzip downloaded fonts
+  ansible.builtin.unarchive:
+    src: "{{ nerdfonts_temp_dir_stat.path }}/{{ item }}.{{ nerdfonts_download_ext }}"
+    dest: "{{ nerdfonts_temp_dir_stat.path }}"
+    remote_src: true
+  loop: "{{ nerdfonts_fonts }}"
+  loop_control:
+    label: "{{ item }}"
+- name: "Find all fonts file found in {{ nerdfonts_temp_dir_stat.path }}"
+  ansible.builtin.find:
+    paths: "{{ nerdfonts_temp_dir_stat.path }}"
+    patterns: "*.{{ nerdfonts_font_ext }}"
+  register: nerdfonts_found_fonts
+- name: Copy over the fonts
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: "{{ nerdfonts_install_path }}"
+    remote_src: true
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  loop: "{{ nerdfonts_found_fonts.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+  when: nerdfonts_found_fonts.matched > 0
+- name: Ensure fontconfig is available
+  become: true
+  ansible.builtin.package:
+    name: fontconfig
+    state: present
+- name: Update font cache (Linux/MacOS)
+  ansible.builtin.command:
+    cmd: "fc-cache -fv {{ nerdfonts_install_path }}"
+  when: ansible_os_family in ['Linux', 'Darwin']
+  changed_when: false

@@ -1,0 +1,40 @@
+---
+- name: Developer Environment Setup
+  hosts: localhost
+  vars:
+    enable_podman: true
+    enable_zsh: true
+    enable_starship: true
+    enable_nerd_fonts: true
+    starship_theme_preset: "tokyo-night"
+    preffered_font: "FiraCode"
+  pre_tasks: []
+  handlers: []
+  tasks:
+    - name: Include git role
+      ansible.builtin.include_role:
+        name: git
+      vars:
+        git_username: "Anirudh Aggarwal"
+        git_email: "16053724+ani1797@users.noreply.github.com"
+    - name: Include podman role
+      ansible.builtin.include_role:
+        name: podman
+      when: enable_podman | default(false)
+    - name: Include zsh role
+      ansible.builtin.include_role:
+        name: zsh
+      when: enable_zsh | default(false)
+    - name: Include nerdfonts role
+      ansible.builtin.include_role:
+        name: nerdfonts
+      vars:
+        nerdfonts_fonts:
+          - "{{ preffered_font }}"
+      when: enable_nerd_fonts | default(false)
+    - name: Include starship role
+      ansible.builtin.include_role:
+        name: starship
+      when: enable_starship | default(false)
+  post_tasks: []
+  roles: []
