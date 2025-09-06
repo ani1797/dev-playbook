@@ -10,5 +10,28 @@ return {
 
     -- Enable ansible-language-server for Ansible
     lspconfig.ansiblels.setup {}
+
+    -- Python
+    lspconfig.pyright.setup{}
+
+    -- TypeScript/JavaScript
+    lspconfig.ts_ls.setup{}
+
+    -- Jinja (using 'jinja-lsp' if available, else fallback to html)
+    lspconfig.html.setup{
+      filetypes = { "html", "jinja", "jinja2" }
+    }
+
+    -- YAML
+    lspconfig.yamlls.setup{}
+
+    -- json
+    lspconfig.jsonls.setup{}
+
+    -- terraform
+    lspconfig.terraformls.setup{}
+
+    -- rust
+    lspconfig.rust_analyzer.setup{}
   end,
 }
