@@ -5,6 +5,8 @@
   ansible.builtin.package:
     name: git
     state: present
+  notify:
+    - Configure git configuration for zsh
 - name: Verify git installation
   tags: verify
   ansible.builtin.command: git --version

@@ -1,0 +1,18 @@
+---
+- name: Configure podman completion for zsh
+  tags: config
+  ansible.builtin.blockinfile:
+    marker: "# {mark} podman configuration"
+    path: "{{ podman_shell_config_file }}"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # Podman configuration
+      source <(podman completion zsh)
+      # Configuring docker alias to point to podman
+      alias docker=podman
+      # Assign completion for docker alias to podman completion
+      compdef docker=podman
+  when: podman_shell_config_file is defined and podman_shell_config_file != ''

@@ -14,6 +14,8 @@
   ansible.builtin.command: mv /tmp/bin/podman-remote-static-linux_amd64 {{ podman_install_path }}/podman
   args:
     creates: "{{ podman_install_path }}/podman"
+  notify: 
+    - Configure podman completion for zsh
 - name: Ensure the podman binary is executable
   become: true
   ansible.builtin.file:

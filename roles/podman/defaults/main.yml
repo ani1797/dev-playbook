@@ -2,3 +2,4 @@
 podman_version: 4.9.1
 podman_download_url: https://github.com/containers/podman/releases/download/v{{podman_version}}/podman-remote-static-linux_amd64.tar.gz
 podman_install_path: /usr/local/bin
+podman_shell_config_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/podman.zsh"
