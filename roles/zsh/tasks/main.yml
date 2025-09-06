@@ -46,3 +46,12 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
     mode: '0755'
+- name: Copy aliases file to plugins directory
+  tags: config
+  notify: ZSH reload shell
+  ansible.builtin.copy:
+    src: aliases.zsh
+    dest: "{{ zsh_plugins_dir }}/aliases.zsh"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0644'
