@@ -2,12 +2,15 @@
 - name: Developer Environment Setup
   hosts: localhost
   vars:
-    enable_podman: true
+    enable_git: false
     enable_zsh: true
-    enable_starship: true
-    enable_nerd_fonts: true
-    starship_theme_preset: "tokyo-night"
+    enable_nerd_fonts: false
+    enable_starship: false
+    enable_direnv: true
+    enable_podman: false
+    enable_nvim: true
     preffered_font: "FiraCode"
+    starship_theme_preset: "tokyo-night"
   pre_tasks: []
   handlers: []
   tasks:
@@ -17,6 +20,7 @@
       vars:
         git_username: "Anirudh Aggarwal"
         git_email: "16053724+ani1797@users.noreply.github.com"
+      when: enable_git | default(true)
     - name: Include podman role
       ansible.builtin.include_role:
         name: podman
@@ -36,5 +40,13 @@
       ansible.builtin.include_role:
         name: starship
       when: enable_starship | default(false)
+    - name: Include direnv role
+      ansible.builtin.include_role:
+        name: direnv
+      when: enable_direnv | default(false)
+    - name: Include nvim role
+      ansible.builtin.include_role:
+        name: nvim
+      when: enable_nvim | default(false)
   post_tasks: []
   roles: []

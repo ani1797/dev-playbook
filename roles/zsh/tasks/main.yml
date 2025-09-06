@@ -38,3 +38,11 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
     mode: '0755'
+- name: Ensure zsh plugins directory exists
+  tags: config
+  ansible.builtin.file:
+    path: "{{ zsh_completion_dir }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0755'

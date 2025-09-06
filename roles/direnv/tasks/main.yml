@@ -1,0 +1,53 @@
+---
+- name: Ensure direnv is installed
+  become: true
+  ansible.builtin.package:
+    name: direnv
+    state: present
+  tags: install
+  notify:
+    - Configure direnv completion for zsh
+- name: Download direnv completion script for zsh
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/zsh-users/zsh-completions/refs/heads/master/src/_direnv"
+    dest: "{{ direnv_shell_completion_file }}"
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: install
+- name: Ensure direnv config directory exists
+  ansible.builtin.file:
+    path: "{{ direnv_config_dir }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure direnv lib directory exists
+  ansible.builtin.file:
+    path: "{{ direnv_config_dir }}/lib"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure direnv.toml is present
+  ansible.builtin.template:
+    src: direnv.toml.j2
+    dest: "{{ direnv_config_dir }}/direnv.toml"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure global direnvrc is created
+  ansible.builtin.copy:
+    content: |
+      ## This configuration is applied to all directories! Be careful what you put here.
+      ## See https://direnv.net/ for more information.
+      ## This file is managed by Ansible, local changes will be overwritten.
+      dotenv_if_exists
+    dest: "{{ direnv_config_dir }}/direnvrc"
+    mode: '0730'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure

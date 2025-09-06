@@ -1,0 +1,40 @@
+---
+- name: Ensure luarocks is installed
+  become: true
+  tags: install
+  ansible.builtin.package:
+    name: luarocks
+    state: present
+- name: Download latest Neovim AppImage
+  become: true
+  tags: install
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
+    dest: /usr/local/bin/nvim
+    mode: '0755'
+- name: Ensure neovim config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
+    state: directory
+    mode: '0755'
+- name: Copy neovim init.lua configuration
+  ansible.builtin.copy:
+    src: init.lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+    mode: '0644'
+    remote_src: false
+- name: Copy lua configuration directory
+  ansible.builtin.copy:
+    src: lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/"
+    mode: '0755'
+    remote_src: false
+- name: Ensure additional nvim packages are installed
+  become: true
+  tags: install
+  ansible.builtin.package:
+    name:
+      - ripgrep
+      - fzf
+      - fd-find
+    state: present

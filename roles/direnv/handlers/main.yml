@@ -1,0 +1,15 @@
+---
+- name: Configure direnv completion for zsh
+  ansible.builtin.blockinfile:
+    marker: "# {mark} direnv configuration"
+    path: "{{ direnv_shell_config_file }}"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      if command -v direnv &> /dev/null
+      then
+          eval "$(direnv hook zsh)"
+      fi
+  tags: configure

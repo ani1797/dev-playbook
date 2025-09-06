@@ -28,3 +28,9 @@ for plugin in {{ zsh_plugins_dir }}/*.zsh; do
   [[ -r $plugin ]] && source $plugin
 done
 {% endif %}
+
+{% if zsh_completion_dir is defined %}
+# Load all completions for zsh from the completions directory
+fpath=({{ zsh_completion_dir }} $fpath)
+autoload -Uz compinit && compinit
+{% endif %}
