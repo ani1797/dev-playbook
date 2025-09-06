@@ -12,4 +12,12 @@ opt.tabstop = 2
 opt.shiftwidth = 2
 opt.expandtab = true
 
--- Add any other early options here
+
+vim.o.signcolumn = 'yes'
+vim.o.wrap = false
+vim.o.hlsearch = false
+vim.o.smartcase = true
+vim.o.ignorecase = true
+vim.o.mouse = 'nvi'
+vim.o.swapfile = false
+vim.o.completeopt = 'menu,menuone,noinsert'
