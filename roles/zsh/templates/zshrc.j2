@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Set emacs keybindings
+bindkey -e emacs
+
 {% if zsh_history_size is defined %}
 # Configure history size
 HISTSIZE={{ zsh_history_size }}
