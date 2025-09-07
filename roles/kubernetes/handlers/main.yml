@@ -57,3 +57,15 @@
     content: |
       # Flux configuration
       source <(flux completion zsh)
+- name: Configure kind completion for zsh
+  tags: config
+  ansible.builtin.blockinfile:
+    marker: "# {mark} kind configuration"
+    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/kind.zsh"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # Kind configuration
+      source <(kind completion zsh)

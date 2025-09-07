@@ -8,3 +8,4 @@ kubernetes_installs:
   - helm
   - flux
   - kubeseal
+  - kind

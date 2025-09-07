@@ -12,6 +12,8 @@
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
     dest: /usr/local/bin/nvim
     mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
 - name: Ensure neovim config directory exists
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/nvim"

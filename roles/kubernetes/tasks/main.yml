@@ -142,3 +142,23 @@
         content: |
           # Adding kse as an alias for kubeseal
           alias kse=kubeseal
+
+# Kind
+- name: Install kind
+  become: true
+  when: "'kind' in kubernetes_installs"
+  notify:
+    - Configure kind completion for zsh
+  block:
+    - name: Get latest kind version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/kubernetes-sigs/kind/releases/latest
+        return_content: true
+      register: kind_release
+    - name: Download kind binary
+      ansible.builtin.get_url:
+        url: "https://kind.sigs.k8s.io/dl/{{ kind_release.json.tag_name }}/kind-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64"
+        dest: /usr/local/bin/kind
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_gid }}"
