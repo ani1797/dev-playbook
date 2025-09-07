@@ -27,8 +27,6 @@
     content: |
       # k9s configuration
       source <(k9s completion zsh)
-      # Setting up k9s defaults
-      alias k9s="k9s -A -r1 --logoless"
 - name: Configure helm completion for zsh
   tags: config
   ansible.builtin.blockinfile:
