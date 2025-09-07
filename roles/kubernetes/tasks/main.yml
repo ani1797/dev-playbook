@@ -1,0 +1,143 @@
+---
+- name: Install kubectl
+  become: true
+  when: "'kubectl' in kubernetes_installs"
+  notify:
+    - Configure kubectl completion for zsh
+  block:
+    - name: Get latest kubectl version
+      ansible.builtin.uri:
+        url: https://dl.k8s.io/release/stable.txt
+        return_content: true
+      register: kubectl_version
+    - name: Download kubectl binary
+      ansible.builtin.get_url:
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content | trim }}/bin/{{ kubernetes_os_map[ansible_facts['os_family']] }}/amd64/kubectl"
+        dest: /usr/local/bin/kubectl
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_gid }}"
+
+# K9s
+- name: Install k9s
+  become: true
+  when: "'k9s' in kubernetes_installs"
+  notify:
+    - Configure k9s completion for zsh
+  block:
+    - name: Get latest k9s version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/derailed/k9s/releases/latest
+        return_content: true
+      register: k9s_release
+    - name: Download and extract k9s
+      ansible.builtin.unarchive:
+        src: "https://github.com/derailed/k9s/releases/download/{{ k9s_release.json.tag_name }}/k9s_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz"
+        dest: /tmp/
+        remote_src: true
+    - name: Move k9s binary to /usr/local/bin
+      ansible.builtin.copy:
+        remote_src: true
+        src: /tmp/k9s
+        dest: /usr/local/bin/k9s
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_gid }}"
+
+# Kubie
+- name: Install kubie
+  become: true
+  when: "'kubie' in kubernetes_installs"
+  block:
+    - name: Get latest kubie version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/sbstp/kubie/releases/latest
+        return_content: true
+      register: kubie_release
+    - name: Download kubie binary
+      ansible.builtin.get_url:
+        url: "https://github.com/sbstp/kubie/releases/download/{{ kubie_release.json.tag_name }}/kubie-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64"
+        dest: /usr/local/bin/kubie
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_gid }}"
+
+# Helm
+- name: Install helm
+  become: true
+  when: "'helm' in kubernetes_installs"
+  notify:
+    - Configure helm completion for zsh
+  block:
+    - name: Get latest helm version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/helm/helm/releases/latest
+        return_content: true
+      register: helm_release
+    - name: Download and extract helm
+      ansible.builtin.unarchive:
+        src: "https://get.helm.sh/helm-{{ helm_release.json.tag_name }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz"
+        dest: /tmp/
+        remote_src: true
+    - name: Move helm binary to /usr/local/bin
+      ansible.builtin.command: mv "/tmp/{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64/helm" /usr/local/bin/helm
+      args:
+        removes: "/tmp/{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64/helm"
+    - name: Clean up helm extracted directory
+      ansible.builtin.file:
+        path: /tmp/{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64
+        state: absent
+
+# Flux
+- name: Install flux
+  become: true
+  when: "'flux' in kubernetes_installs"
+  notify:
+    - Configure flux completion for zsh
+  block:
+    - name: Get latest flux version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/fluxcd/flux2/releases/latest
+        return_content: true
+      register: flux_release
+    - name: Download and extract flux
+      ansible.builtin.unarchive:
+        src: "https://github.com/fluxcd/flux2/releases/download/{{ flux_release.json.tag_name }}/flux_{{ flux_release.json.tag_name | regex_replace('^v', '') }}_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz"
+        dest: /tmp/
+        remote_src: true
+    - name: Move flux binary to /usr/local/bin
+      ansible.builtin.command: mv "/tmp/flux" /usr/local/bin/flux
+      args:
+        removes: "/tmp/flux"
+
+# Kubeseal
+- name: Install kubeseal
+  become: true
+  when: "'kubeseal' in kubernetes_installs"
+  block:
+    - name: Get latest kubeseal version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest
+        return_content: true
+      register: kubeseal_release
+    - name: Download and extract kubeseal binary
+      ansible.builtin.unarchive:
+        src: https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ kubeseal_release.json.tag_name }}/kubeseal-{{ kubeseal_release.json.tag_name | regex_replace('^v', '') }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz
+        dest: /usr/local/bin/
+        remote_src: true
+        mode: '0755'
+        extra_opts:
+          - --strip-components=1
+          - kubeseal
+      args:
+        creates: /usr/local/bin/kubeseal
+    - name: Install kubeseal zsh completions
+      ansible.builtin.blockinfile:
+        path: /home/{{ ansible_user_id }}/.config/zsh/plugins/kubeseal.zsh
+        create: true
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_gid }}"
+        mode: '0644'
+        content: |
+          # Adding kse as an alias for kubeseal
+          alias kse=kubeseal

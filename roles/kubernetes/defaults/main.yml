@@ -1,0 +1,10 @@
+kubernetes_os_map:
+  Debian: linux
+  Darwin: darwin
+kubernetes_installs:
+  - kubectl
+  - k9s
+  - kubie
+  - helm
+  - flux
+  - kubeseal

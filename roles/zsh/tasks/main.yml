@@ -54,4 +54,4 @@
     dest: "{{ zsh_plugins_dir }}/aliases.zsh"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
-    mode: '0644'
+    mode: '0744'
