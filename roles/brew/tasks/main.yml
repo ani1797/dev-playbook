@@ -1,0 +1,27 @@
+---
+- name: Loading OS specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+- name: Run the homebrew installation script
+  ansible.builtin.command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: "{{ brew_install_path }}/brew"
+- name: Ensure brew is in the PATH
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/brew.zsh"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # Homebrew
+      if [ -x "{{ brew_install_path }}/brew" ]; then
+        eval "$({{ brew_install_path }}/brew shellenv)"
+      fi
+- name: Install default packages
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ brew_default_packages }}"
+  become: false
+  environment:
