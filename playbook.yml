@@ -58,4 +58,3 @@
       when: enable_1password | default(false)
       ansible.builtin.import_role:
         name: onepassword
-

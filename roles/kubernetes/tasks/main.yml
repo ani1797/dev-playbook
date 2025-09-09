@@ -1,4 +1,5 @@
 ---
+# Install kubectl
 - name: Install kubectl
   become: true
   when: "'kubectl' in kubernetes_installs"
@@ -30,9 +31,15 @@
         url: https://api.github.com/repos/derailed/k9s/releases/latest
         return_content: true
       register: k9s_release
+    - name: Set k9s download URL
+      ansible.builtin.set_fact:
+        k9s_download_url: >-
+          https://github.com/derailed/k9s
+          /releases/download/{{ k9s_release.json.tag_name }}/
+          k9s_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz
     - name: Download and extract k9s
       ansible.builtin.unarchive:
-        src: "https://github.com/derailed/k9s/releases/download/{{ k9s_release.json.tag_name }}/k9s_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz"
+        src: "{{ k9s_download_url | trim | replace(' ', '') }}"
         dest: /tmp/
         remote_src: true
     - name: Move k9s binary to /usr/local/bin
@@ -54,9 +61,15 @@
         url: https://api.github.com/repos/sbstp/kubie/releases/latest
         return_content: true
       register: kubie_release
+    - name: Set kubie download URL
+      ansible.builtin.set_fact:
+        kubie_download_url: >-
+          https://github.com/sbstp/kubie
+          /releases/download/{{ kubie_release.json.tag_name }}
+          /kubie-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64
     - name: Download kubie binary
       ansible.builtin.get_url:
-        url: "https://github.com/sbstp/kubie/releases/download/{{ kubie_release.json.tag_name }}/kubie-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64"
+        url: "{{ kubie_download_url | trim | replace(' ', '') }}"
         dest: /usr/local/bin/kubie
         mode: '0755'
         owner: "{{ ansible_user_id }}"
@@ -100,9 +113,14 @@
         url: https://api.github.com/repos/fluxcd/flux2/releases/latest
         return_content: true
       register: flux_release
+    - name: Set flux download URL
+      ansible.builtin.set_fact:
+        flux_download_url: >-
+          https://github.com/fluxcd/flux2/releases/download/{{ flux_release.json.tag_name }}
+          /flux_{{ flux_release.json.tag_name | regex_replace('^v', '') }}_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz
     - name: Download and extract flux
       ansible.builtin.unarchive:
-        src: "https://github.com/fluxcd/flux2/releases/download/{{ flux_release.json.tag_name }}/flux_{{ flux_release.json.tag_name | regex_replace('^v', '') }}_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz"
+        src: "{{ flux_download_url | trim | replace(' ', '') }}"
         dest: /tmp/
         remote_src: true
     - name: Move flux binary to /usr/local/bin
@@ -120,9 +138,14 @@
         url: https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest
         return_content: true
       register: kubeseal_release
+    - name: Set kubeseal download URL
+      ansible.builtin.set_fact:
+        kubeseal_download_url: >-
+          https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ kubeseal_release.json.tag_name }}
+          /kubeseal-{{ kubeseal_release.json.tag_name | regex_replace('^v', '') }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz
     - name: Download and extract kubeseal binary
       ansible.builtin.unarchive:
-        src: https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ kubeseal_release.json.tag_name }}/kubeseal-{{ kubeseal_release.json.tag_name | regex_replace('^v', '') }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz
+        src: "{{ kubeseal_download_url | trim | replace(' ', '') }}"
         dest: /usr/local/bin/
         remote_src: true
         owner: "{{ ansible_user_id }}"

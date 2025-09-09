@@ -7,15 +7,6 @@
     state: present
   notify:
     - Configure git configuration for zsh
-- name: Verify git installation
-  tags: verify
-  ansible.builtin.command: git --version
-  register: git_version_output
-  changed_when: false
-- name: Display git version
-  tags: debug
-  ansible.builtin.debug:
-    var: git_version_output.stdout
 - name: Configure git user name
   tags: config
   community.general.git_config:
