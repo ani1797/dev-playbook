@@ -24,4 +24,5 @@
     state: present
   loop: "{{ brew_default_packages }}"
   become: false
-  environment:
+  loop_control:
+    label: "{{ item }}"

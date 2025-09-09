@@ -10,54 +10,52 @@
     enable_direnv: true
     enable_podman: true
     enable_nvim: true
-    preffered_font: "FiraCode"
+    enable_kubernetes: true
+    enable_1password: true
     starship_theme_preset: "tokyo-night"
-  pre_tasks: []
-  handlers: []
+    git_username: "Anirudh Aggarwal"
+    git_email: "16053724+ani1797@users.noreply.github.com"
+    nerdfonts_fonts:
+      - FiraCode
   tasks:
     - name: Include brew role
-      ansible.builtin.include_role:
-        name: brew
       when: enable_brew | default(true)
+      ansible.builtin.import_role:
+        name: brew
     - name: Include git role
-      ansible.builtin.include_role:
-        name: git
-      vars:
-        git_username: "Anirudh Aggarwal"
-        git_email: "16053724+ani1797@users.noreply.github.com"
       when: enable_git | default(true)
+      ansible.builtin.import_role:
+        name: git
     - name: Include podman role
-      ansible.builtin.include_role:
-        name: podman
       when: enable_podman | default(false)
+      ansible.builtin.import_role:
+        name: podman
     - name: Include zsh role
-      ansible.builtin.include_role:
-        name: zsh
       when: enable_zsh | default(false)
+      ansible.builtin.import_role:
+        name: zsh
     - name: Include nerdfonts role
-      ansible.builtin.include_role:
-        name: nerdfonts
-      vars:
-        nerdfonts_fonts:
-          - "{{ preffered_font }}"
       when: enable_nerd_fonts | default(false)
+      ansible.builtin.import_role:
+        name: nerdfonts
     - name: Include starship role
-      ansible.builtin.include_role:
-        name: starship
       when: enable_starship | default(false)
+      ansible.builtin.import_role:
+        name: starship
     - name: Include direnv role
-      ansible.builtin.include_role:
-        name: direnv
       when: enable_direnv | default(false)
+      ansible.builtin.import_role:
+        name: direnv
     - name: Include nvim role
-      ansible.builtin.include_role:
-        name: nvim
       when: enable_nvim | default(false)
+      ansible.builtin.import_role:
+        name: nvim
     - name: Include kubernetes role
-      ansible.builtin.include_role:
+      when: enable_kubernetes | default(false)
+      ansible.builtin.import_role:
         name: kubernetes
     - name: Include onepassword role
-      ansible.builtin.include_role:
+      when: enable_1password | default(false)
+      ansible.builtin.import_role:
         name: onepassword
-  post_tasks: []
-  roles: []
+

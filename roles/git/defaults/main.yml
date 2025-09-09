@@ -58,6 +58,4 @@ git_toptal_ignore_templates:
   - venv
   - virtualenv
 git_toptal_url: https://www.toptal.com/developers/gitignore
-
-
 git_shell_config_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/git.zsh"

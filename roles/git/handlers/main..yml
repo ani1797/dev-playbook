@@ -1,6 +1,7 @@
 ---
 - name: Configure git configuration for zsh
   tags: config
+  when: git_shell_config_file is defined and git_shell_config_file != ''
   ansible.builtin.blockinfile:
     marker: "# {mark} git configuration"
     path: "{{ git_shell_config_file }}"
@@ -13,4 +14,3 @@
       alias g=git
       # Assign completion for docker alias to podman completion
       compdef g=git
-  when: git_shell_config_file is defined and git_shell_config_file != ''
