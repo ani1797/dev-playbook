@@ -16,4 +16,3 @@
       alias docker=podman
       # Assign completion for docker alias to podman completion
       compdef docker=podman
-  
