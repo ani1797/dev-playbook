@@ -2,16 +2,17 @@
 - name: Developer Environment Setup
   hosts: localhost
   vars:
-    enable_brew: true
-    enable_git: true
-    enable_zsh: true
-    enable_nerd_fonts: true
-    enable_starship: true
-    enable_direnv: true
-    enable_podman: true
+    enable_brew: false
+    enable_git: false
+    enable_zsh: false
+    enable_nerd_fonts: false
+    enable_starship: false
+    enable_direnv: false
+    enable_podman: false
     enable_nvim: true
-    enable_kubernetes: true
-    enable_1password: true
+    enable_kubernetes: false
+    enable_1password: false
+    enable_nvm: true
     starship_theme_preset: "tokyo-night"
     git_username: "Anirudh Aggarwal"
     git_email: "16053724+ani1797@users.noreply.github.com"
@@ -19,11 +20,11 @@
       - FiraCode
   tasks:
     - name: Include brew role
-      when: enable_brew | default(true)
+      when: enable_brew | default(false)
       ansible.builtin.import_role:
         name: brew
     - name: Include git role
-      when: enable_git | default(true)
+      when: enable_git | default(false)
       ansible.builtin.import_role:
         name: git
     - name: Include podman role
@@ -58,3 +59,7 @@
       when: enable_1password | default(false)
       ansible.builtin.import_role:
         name: onepassword
+    - name: Include nvm role
+      when: enable_nvm | default(false)
+      ansible.builtin.import_role:
+        name: nvm

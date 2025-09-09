@@ -2,4 +2,4 @@
 brew_default_packages:
   - tfenv
   - uv
-  - n
+  - gh
