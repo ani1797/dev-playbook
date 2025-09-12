@@ -3,3 +3,6 @@ brew_default_packages:
   - tfenv
   - uv
   - gh
+  - httpie
+  - jq
+  - yq
