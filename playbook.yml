@@ -2,16 +2,16 @@
 - name: Developer Environment Setup
   hosts: localhost
   vars:
-    enable_brew: false
-    enable_git: false
-    enable_zsh: false
-    enable_nerd_fonts: false
-    enable_starship: false
-    enable_direnv: false
-    enable_podman: false
+    enable_brew: true
+    enable_git: true
+    enable_zsh: true
+    enable_nerd_fonts: true
+    enable_starship: true
+    enable_direnv: true
+    enable_podman: true
     enable_nvim: true
-    enable_kubernetes: false
-    enable_1password: false
+    enable_kubernetes: true
+    enable_1password: true
     enable_nvm: true
     starship_theme_preset: "tokyo-night"
     git_username: "Anirudh Aggarwal"
