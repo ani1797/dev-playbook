@@ -14,5 +14,7 @@
       source <(podman completion zsh)
       # Configuring docker alias to point to podman
       alias docker=podman
+      alias d="$(docker)"
       # Assign completion for docker alias to podman completion
       compdef docker=podman
+      compdef d=podman
