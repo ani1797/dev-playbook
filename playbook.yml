@@ -8,7 +8,7 @@
     enable_nerd_fonts: true
     enable_starship: true
     enable_direnv: true
-    enable_podman: true
+    enable_podman: false
     enable_nvim: true
     enable_kubernetes: true
     enable_1password: true
