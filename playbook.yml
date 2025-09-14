@@ -13,6 +13,7 @@
     enable_kubernetes: true
     enable_1password: true
     enable_nvm: true
+    enable_uv: true
     starship_theme_preset: "tokyo-night"
     git_username: "Anirudh Aggarwal"
     git_email: "16053724+ani1797@users.noreply.github.com"
@@ -63,3 +64,7 @@
       when: enable_nvm | default(false)
       ansible.builtin.import_role:
         name: nvm
+    - name: Include uv role
+      ansible.builtin.import_role:
+        name: uv
+      when: enable_uv | default(false)

@@ -1,0 +1,37 @@
+preview = true
+native-tls = true
+compile-bytecode = false
+
+[[index]]
+name = "pypi"
+url = "https://pypi.org/simple/"
+default = true
+
+[[index]]
+name = "pypi-mirror"
+url = "https://files.pythonhosted.org/simple"
+default = true
+
+[[index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true
+
+[[index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[[index]]
+name = "prodigy"
+url = "https://1821-659B-1112-B778@download.prodi.gy/index"
+explicit = true
+
+{% if uv_extra_config is not none %}
+{{ uv_extra_config | indent(0) }}
+{% endif %}
