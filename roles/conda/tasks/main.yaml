@@ -1,0 +1,15 @@
+---
+- name: Ensure conda directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/conda"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+- name: Ensure conda configuration is present
+  ansible.builtin.template:
+    src: conda.yaml.j2
+    dest: "{{ ansible_env.HOME }}/.config/conda/.condarc"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"

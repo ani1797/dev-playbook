@@ -43,7 +43,12 @@
       ## This configuration is applied to all directories! Be careful what you put here.
       ## See https://direnv.net/ for more information.
       ## This file is managed by Ansible, local changes will be overwritten.
+
+      # Load .env if it exists
       dotenv_if_exists
+
+      # Load .oprc if it exists
+      use oprc
     dest: "{{ direnv_config_dir }}/direnvrc"
     mode: '0730'
     owner: "{{ ansible_user_id }}"

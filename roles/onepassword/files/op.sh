@@ -7,6 +7,3 @@ use_oprc() {
     direnv_load op run --env-file .oprc --no-masking -- direnv dump
     watch_file .oprc
 }
-
-# Load 1Password credentials from .oprc file if it exists
-use_oprc
