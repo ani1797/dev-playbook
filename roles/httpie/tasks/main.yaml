@@ -1,0 +1,17 @@
+---
+- name: Ensure httpie in installed
+  community.general.homebrew:
+    name: httpie
+    state: present
+- name: Ensure the httpie configuration directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/httpie"
+    state: directory
+    mode: '0755'
+- name: Copy the httpie configuration file
+  ansible.builtin.template:
+    src: config.json.j2
+    dest: "{{ ansible_env.HOME }}/.config/httpie/config.json"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"

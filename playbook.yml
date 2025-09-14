@@ -16,6 +16,7 @@
     enable_uv: true
     enable_conda: true
     enable_tfenv: true
+    enable_httpie: true
     starship_theme_preset: "tokyo-night"
     git_username: "Anirudh Aggarwal"
     git_email: "16053724+ani1797@users.noreply.github.com"
@@ -78,3 +79,7 @@
       ansible.builtin.import_role:
         name: tfenv
       when: enable_tfenv | default(false)
+    - name: Ensure httpie is installed
+      ansible.builtin.import_role:
+        name: httpie
+      when: enable_httpie | default(false)

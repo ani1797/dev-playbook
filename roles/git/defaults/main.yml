@@ -59,3 +59,7 @@ git_toptal_ignore_templates:
   - virtualenv
 git_toptal_url: https://www.toptal.com/developers/gitignore
 git_shell_config_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/git.zsh"
+git_user_configs:
+  push.autoSetupRemote: true
+  pull.rebase: false
+  fetch.prune: true

@@ -35,6 +35,12 @@
     scope: global
     value: "{{ git_default_branch }}"
   when: git_default_branch is not none
+- name: Enable color UI
+  tags: config
+  community.general.git_config:
+    name: color.ui
+    scope: global
+    value: auto
 - name: Ensure git global config directory exists
   tags: config
   ansible.builtin.file:
@@ -57,3 +63,13 @@
     scope: global
     value: "{{ ansible_env.HOME }}/.config/git/.gitignore"
   when: git_setup_global_ignore | default(true) and git_toptal_ignore_templates | length > 0
+- name: Ensure user-defined configs are applied
+  tags: config
+  community.general.git_config:
+    name: "{{ item.key }}"
+    scope: global
+    value: "{{ item.value }}"
+  loop: "{{ git_user_configs | dict2items }}"
+  loop_control:
+    label: "{{ item.key }} = {{ item.value }}"
+  when: git_user_configs is defined
