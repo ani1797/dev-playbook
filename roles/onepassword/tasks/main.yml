@@ -35,3 +35,13 @@
       if type op &>/dev/null; then
         source <(op completion zsh)
       fi
+- name: Detect the direnv plugins directory
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/direnv/lib"
+  register: direnv_lib_dir
+- name: Copy the op direnv extension
+  ansible.builtin.copy:
+    src: op.sh
+    dest: "{{ ansible_env.HOME }}/.config/direnv/lib/op.sh"
+    mode: '0755'
+  when: direnv_lib_dir.stat.exists
