@@ -1,2 +1,5 @@
 ---
 nvm_version: "v0.40.3"
+nvm_enable_npmrc: true
+nvm_author_email: null
+nvm_author_name: null

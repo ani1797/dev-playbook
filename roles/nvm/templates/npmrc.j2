@@ -1,0 +1,13 @@
+save-exact=true
+prefer-offline=true
+sign-git-commit=true
+cache=~/.cache/npm_cache
+# cafile is the path to the certificate file (also can set NODE_EXTRA_CA_CERTS env variable instead)
+# cafile=/usr/local/share/ca-certificates/cacert.pem
+
+{% if nvm_author_email is defined %}
+init-author-email={{ nvm_author_email }}
+{% endif %}
+{% if nvm_author_name is defined %}
+init-author-name={{ nvm_author_name }}
+{% endif %}

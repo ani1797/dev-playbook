@@ -24,3 +24,11 @@
       # Load nvm if it exists
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+- name: Ensure npmrc is created
+  ansible.builtin.template:
+    src: npmrc.j2
+    dest: "{{ ansible_env.HOME }}/.npmrc"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  when: nvm_enable_npmrc | default(false)

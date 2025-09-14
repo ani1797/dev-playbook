@@ -1,6 +1,5 @@
 ---
 brew_default_packages:
   - gh
-  - httpie
   - jq
   - yq
