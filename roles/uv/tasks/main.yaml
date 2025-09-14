@@ -23,3 +23,17 @@
     src: uv.toml.j2
     dest: "{{ ansible_env.HOME }}/.config/uv/uv.toml"
     mode: '0644'
+- name: Ensure pip config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/pip"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+- name: Ensure pip configuration is present
+  ansible.builtin.template:
+    src: pip.conf.j2
+    dest: "{{ ansible_env.HOME }}/.config/pip/pip.conf"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
