@@ -1,0 +1,13 @@
+---
+- name: Configure onepassword completion for zsh
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/onepassword.zsh"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # OnePassword CLI completion
+      if type op &>/dev/null; then
+        source <(op completion zsh)
+      fi

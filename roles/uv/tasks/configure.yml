@@ -1,8 +1,4 @@
 ---
-- name: Ensure uv in installed
-  community.general.homebrew:
-    name: uv
-    state: present
 - name: Detect the direnv plugins directory
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.config/direnv/lib"

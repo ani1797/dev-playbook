@@ -1,0 +1,27 @@
+---
+- name: Check for available theme presets
+  tags: info
+  register: starship_presets
+  changed_when: false
+  ansible.builtin.command: starship preset --list
+  when: starship_theme_preset is not none
+- name: Load the starship theme preset configuration
+  ansible.builtin.command: starship preset -o  "/tmp/starship_{{ starship_theme_preset }}" "{{ starship_theme_preset }}"
+  args:
+    creates: "/tmp/starship_{{ starship_theme_preset }}"
+  when:
+    - starship_theme_preset is not none
+    - starship_presets.stdout_lines is defined
+    - starship_theme_preset in starship_presets.stdout_lines
+- name: Apply the starship theme preset configuration
+  become: true
+  ansible.builtin.copy:
+    src: "/tmp/starship_{{ starship_theme_preset }}"
+    dest: "{{ starship_config_file }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0644'
+  when:
+    - starship_theme_preset is not none
+    - starship_presets.stdout_lines is defined
+    - starship_theme_preset in starship_presets.stdout_lines

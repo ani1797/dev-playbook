@@ -1,0 +1,4 @@
+brew_default_packages:
+  - gh
+  - jq
+  - yq

@@ -1,0 +1,15 @@
+---
+- name: Ensure direnv is installed
+  become: true
+  ansible.builtin.package:
+    name: direnv
+    state: present
+  tags: install
+- name: Download direnv completion script for zsh
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/zsh-users/zsh-completions/refs/heads/master/src/_direnv"
+    dest: "{{ direnv_shell_completion_file }}"
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: install

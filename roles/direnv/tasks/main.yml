@@ -1,70 +1,11 @@
 ---
-- name: Ensure direnv is installed
-  become: true
-  ansible.builtin.package:
-    name: direnv
-    state: present
-  tags: install
-- name: Download direnv completion script for zsh
-  ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/zsh-users/zsh-completions/refs/heads/master/src/_direnv"
-    dest: "{{ direnv_shell_completion_file }}"
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: install
-- name: Ensure direnv config directory exists
-  ansible.builtin.file:
-    path: "{{ direnv_config_dir }}"
-    state: directory
-    mode: '0755'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: configure
-- name: Ensure direnv lib directory exists
-  ansible.builtin.file:
-    path: "{{ direnv_config_dir }}/lib"
-    state: directory
-    mode: '0755'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: configure
-- name: Ensure direnv.toml is present
-  ansible.builtin.template:
-    src: direnv.toml.j2
-    dest: "{{ direnv_config_dir }}/direnv.toml"
-    mode: '0644'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: configure
-- name: Ensure global direnvrc is created
-  ansible.builtin.copy:
-    content: |
-      ## This configuration is applied to all directories! Be careful what you put here.
-      ## See https://direnv.net/ for more information.
-      ## This file is managed by Ansible, local changes will be overwritten.
-
-      # Load .env if it exists
-      dotenv_if_exists
-
-      # Load .oprc if it exists
-      use oprc
-    dest: "{{ direnv_config_dir }}/direnvrc"
-    mode: '0730'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: configure
-- name: Configure direnv completion for zsh
-  ansible.builtin.blockinfile:
-    marker: "# {mark} direnv configuration"
-    path: "{{ direnv_shell_config_file }}"
-    create: true
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-    content: |
-      if command -v direnv &> /dev/null
-      then
-          eval "$(direnv hook zsh)"
-      fi
-  tags: configure
+- name: Load OS-specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+  failed_when: false
+- name: Include install tasks
+  ansible.builtin.import_tasks: install.yml
+- name: Include configure tasks
+  ansible.builtin.import_tasks: configure.yml
+- name: Include shell tasks
+  ansible.builtin.import_tasks: shell.yml

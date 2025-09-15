@@ -1,34 +1,11 @@
 ---
-- name: Download nvm script
-  ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh"
-    dest: /tmp/install_nvm.sh
-    mode: '0755'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-- name: Run nvm install script
-  ansible.builtin.command: bash /tmp/install_nvm.sh
-  environment:
-    PROFILE: /dev/null
-  args:
-    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
-- name: Ensure nvm completion and activation is in plugins directory
-  ansible.builtin.blockinfile:
-    marker: "# {mark} nvm configuration"
-    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/nvm.zsh"
-    create: true
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-    content: |
-      # Load nvm if it exists
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-- name: Ensure npmrc is created
-  ansible.builtin.template:
-    src: npmrc.j2
-    dest: "{{ ansible_env.HOME }}/.npmrc"
-    mode: '0644'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  when: nvm_enable_npmrc | default(false)
+- name: Load OS-specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+  failed_when: false
+- name: Include install tasks
+  ansible.builtin.import_tasks: install.yml
+- name: Include shell tasks
+  ansible.builtin.import_tasks: shell.yml
+- name: Include configure tasks
+  ansible.builtin.import_tasks: configure.yml

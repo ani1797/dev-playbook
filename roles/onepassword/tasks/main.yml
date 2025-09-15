@@ -1,4 +1,12 @@
 ---
+- name: Load OS-specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+  failed_when: false
+- name: Include install tasks
+  ansible.builtin.import_tasks: install.yml
+- name: Include shell tasks
+  ansible.builtin.import_tasks: shell.yml
 - name: Download the onepassword CLI
   ansible.builtin.get_url:
     url: "https://cache.agilebits.com/dist/1P/op2/pkg/{{ onepassword_version }}/op_linux_amd64_{{ onepassword_version }}.zip"

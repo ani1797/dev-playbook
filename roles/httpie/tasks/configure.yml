@@ -1,8 +1,4 @@
 ---
-- name: Ensure httpie in installed
-  community.general.homebrew:
-    name: httpie
-    state: present
 - name: Ensure the httpie configuration directory exists
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/httpie"

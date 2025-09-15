@@ -1,0 +1,9 @@
+---
+- name: Ensure git is installed
+  tags: install
+  become: true
+  ansible.builtin.package:
+    name: git
+    state: present
+  notify:
+    - Configure git configuration for zsh

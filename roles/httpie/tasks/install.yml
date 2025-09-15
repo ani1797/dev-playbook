@@ -1,0 +1,5 @@
+---
+- name: Ensure httpie is installed
+  community.general.homebrew:
+    name: httpie
+    state: present

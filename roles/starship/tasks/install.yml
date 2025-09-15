@@ -1,0 +1,14 @@
+---
+- name: Download the starship installscript.
+  tags: download
+  ansible.builtin.get_url:
+    url: "{{ starship_installer_url }}"
+    dest: /tmp/starship_install.sh
+    mode: '0755'
+- name: Install starship prompt
+  become: true
+  tags: install
+  ansible.builtin.command: /tmp/starship_install.sh -f -y --bin-dir "{{ starship_install_path }}"
+  args:
+    creates: "{{ starship_install_path }}/starship"
+  notify: Configure shell to use starship

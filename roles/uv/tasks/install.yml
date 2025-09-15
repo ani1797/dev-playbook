@@ -1,0 +1,5 @@
+---
+- name: Ensure uv is installed
+  community.general.homebrew:
+    name: uv
+    state: present

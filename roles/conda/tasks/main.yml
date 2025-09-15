@@ -1,4 +1,8 @@
 ---
+- name: Load OS-specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+  failed_when: false
 - name: Ensure conda directory exists
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/conda"

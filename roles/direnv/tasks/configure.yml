@@ -1,0 +1,42 @@
+---
+- name: Ensure direnv config directory exists
+  ansible.builtin.file:
+    path: "{{ direnv_config_dir }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure direnv lib directory exists
+  ansible.builtin.file:
+    path: "{{ direnv_config_dir }}/lib"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure direnv.toml is present
+  ansible.builtin.template:
+    src: direnv.toml.j2
+    dest: "{{ direnv_config_dir }}/direnv.toml"
+    mode: '0644'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
+- name: Ensure global direnvrc is created
+  ansible.builtin.copy:
+    content: |
+      ## This configuration is applied to all directories! Be careful what you put here.
+      ## See https://direnv.net/ for more information.
+      ## This file is managed by Ansible, local changes will be overwritten.
+
+      # Load .env if it exists
+      dotenv_if_exists
+
+      # Load .oprc if it exists
+      use oprc
+    dest: "{{ direnv_config_dir }}/direnvrc"
+    mode: '0730'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+  tags: configure
