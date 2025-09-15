@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 export EDITOR=$(which nvim || which vim || which nano)
-
+export PATH="$HOME/.local/bin:$PATH"
 if [ -r "$HOME/.zshenv.local" ]; then
   source "$HOME/.zshenv.local"
 fi
