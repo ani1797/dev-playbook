@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 use_oprc() {
     [[ -f .oprc ]] || return 0
     if ! op whoami > /dev/null 2>&1; then

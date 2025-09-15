@@ -1,6 +1,10 @@
 #!/usr/bin/env zsh
 export EDITOR=$(which nvim || which vim || which nano)
+
+# Adding user's local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
+
+# Allowing user's local zshenv overrides
 if [ -r "$HOME/.zshenv.local" ]; then
   source "$HOME/.zshenv.local"
 fi

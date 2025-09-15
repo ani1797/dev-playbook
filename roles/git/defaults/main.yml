@@ -1,4 +1,6 @@
 ---
+git_username: null
+git_email: null
 git_default_branch: main
 git_aliases:
   a: add

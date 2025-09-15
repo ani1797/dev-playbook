@@ -1,7 +1,23 @@
----
-- name: Ensure zsh is installed
+- name: Ensure zsh is installed (Debian/Ubuntu/WSL)
   become: true
   ansible.builtin.package:
     name: zsh
     state: present
-  tags: download
+  when: ansible_os_family == "Debian"
+- name: Ensure zsh is installed (RedHat/Fedora)
+  become: true
+  ansible.builtin.yum:
+    name: zsh
+    state: present
+  when: ansible_os_family == "RedHat"
+- name: Ensure zsh is installed (Arch Linux)
+  become: true
+  community.general.pacman:
+    name: zsh
+    state: present
+  when: ansible_os_family == "Archlinux"
+- name: Ensure zsh is installed (macOS)
+  when: ansible_os_family == 'Darwin'
+  community.general.homebrew:
+    name: zsh
+    state: present

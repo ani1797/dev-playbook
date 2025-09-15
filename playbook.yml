@@ -1,68 +1,69 @@
----
 - name: Developer Environment Setup
   hosts: all
+  gather_facts: true
   tasks:
+    - name: Include zsh role
+      when: zsh_enabled | default(false)
+      ansible.builtin.include_role:
+        name: zsh
     - name: Include brew role
-      when: enable_brew | default(false)
-      ansible.builtin.import_role:
+      when: brew_enabled | default(false)
+      ansible.builtin.include_role:
         name: brew
     - name: Include git role
-      when: enable_git | default(false)
-      ansible.builtin.import_role:
+      when: git_enabled | default(false)
+      ansible.builtin.include_role:
         name: git
-    - name: Include podman role
-      when: enable_podman | default(false)
-      ansible.builtin.import_role:
-        name: podman
-    - name: Include zsh role
-      when: enable_zsh | default(false)
-      ansible.builtin.import_role:
-        name: zsh
-    - name: Include nerdfonts role
-      when: enable_nerd_fonts | default(false)
-      ansible.builtin.import_role:
-        name: nerdfonts
-    - name: Include starship role
-      when: enable_starship | default(false)
-      ansible.builtin.import_role:
-        name: starship
-    - name: Include direnv role
-      when: enable_direnv | default(false)
-      ansible.builtin.import_role:
-        name: direnv
-    - name: Include nvim role
-      when: enable_nvim | default(false)
-      ansible.builtin.import_role:
-        name: nvim
-    - name: Include kubernetes role
-      when: enable_kubernetes | default(false)
-      ansible.builtin.import_role:
-        name: kubernetes
-    - name: Include onepassword role
-      when: enable_1password | default(false)
-      ansible.builtin.import_role:
-        name: onepassword
-    - name: Include nvm role
-      when: enable_nvm | default(false)
-      ansible.builtin.import_role:
-        name: nvm
-    - name: Include uv role
-      ansible.builtin.import_role:
-        name: uv
-      when: enable_uv | default(false)
-    - name: Include conda role
-      ansible.builtin.import_role:
-        name: conda
-      when: enable_conda | default(false)
-    - name: Include tfenv role
-      ansible.builtin.import_role:
-        name: tfenv
-      when: enable_tfenv | default(false)
-    - name: Ensure httpie is installed
-      ansible.builtin.import_role:
-        name: httpie
-      when: enable_httpie | default(false)
-    - name: Ensure precommit is installed
-      ansible.builtin.import_role:
-        name: precommit
-      when: enable_precommit | default(false)
+
+    # - name: Include podman role
+    #   when: enable_podman | default(false)
+    #   ansible.builtin.import_role:
+    #     name: podman
+    # - name: Include nerdfonts role
+    #   when: enable_nerd_fonts | default(false)
+    #   ansible.builtin.import_role:
+    #     name: nerdfonts
+    # - name: Include starship role
+    #   when: enable_starship | default(false)
+    #   ansible.builtin.import_role:
+    #     name: starship
+    # - name: Include direnv role
+    #   when: enable_direnv | default(false)
+    #   ansible.builtin.import_role:
+    #     name: direnv
+    # - name: Include nvim role
+    #   when: enable_nvim | default(false)
+    #   ansible.builtin.import_role:
+    #     name: nvim
+    # - name: Include kubernetes role
+    #   when: enable_kubernetes | default(false)
+    #   ansible.builtin.import_role:
+    #     name: kubernetes
+    # - name: Include onepassword role
+    #   when: enable_1password | default(false)
+    #   ansible.builtin.import_role:
+    #     name: onepassword
+    # - name: Include nvm role
+    #   when: enable_nvm | default(false)
+    #   ansible.builtin.import_role:
+    #     name: nvm
+    # - name: Include uv role
+    #   ansible.builtin.import_role:
+    #     name: uv
+    #   when: enable_uv | default(false)
+    # - name: Include conda role
+    #   ansible.builtin.import_role:
+    #     name: conda
+    #   when: enable_conda | default(false)
+    # - name: Include tfenv role
+    #   ansible.builtin.import_role:
+    #     name: tfenv
+    #   when: enable_tfenv | default(false)
+    # - name: Ensure httpie is installed
+    #   ansible.builtin.import_role:
+    #     name: httpie
+    #   when: enable_httpie | default(false)
+    # - name: Ensure precommit is installed
+    #   ansible.builtin.import_role:
+    #     name: precommit
+    #   when: enable_precommit | default(false)

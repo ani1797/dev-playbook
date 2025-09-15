@@ -32,11 +32,11 @@ for plugin in {{ zsh_plugins_dir }}/*.zsh; do
 done
 {% endif %}
 
-{% if zsh_completion_dir is defined %}
+{% if zsh_completions_dir is defined %}
 # Load all completions for zsh from the completions directory
-fpath=({{ zsh_completion_dir }} $fpath)
-autoload -Uz compinit && compinit
+fpath=({{ zsh_completions_dir }} $fpath)
+autoload -Uz compinit && compinit -C
 {% endif %}
 
-
-
+# Loading zprof module for profiling zsh startup time
+zmodload zsh/zprof

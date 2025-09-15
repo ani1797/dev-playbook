@@ -1,31 +1,37 @@
 all:
+  vars:
+    zsh_enabled: true
+    git_enabled: true
+    brew_enabled: true
+    zsh_plugins_dir: "{{ ansible_env.HOME }}/.config/zsh/plugins"
+    zsh_completions_dir: "{{ ansible_env.HOME }}/.config/zsh/completions"
+
+    # enable_nerd_fonts: true
+    # enable_starship: true
+    # enable_direnv: true
+    # enable_podman: false
+    # enable_nvim: true
+    # enable_kubernetes: true
+    # enable_1password: true
+    # enable_nvm: true
+    # enable_uv: true
+    # enable_conda: true
+    # enable_tfenv: true
+    # enable_httpie: true
+    # enable_precommit: true
+    # starship_theme_preset: "catppuccin-powerline" # pastel-powerline, gruvbox-rainbow, catppuccin-powerline, jetpack
+    # git_username: "Anirudh Aggarwal"
+    # git_email: "16053724+ani1797@users.noreply.github.com"
+    # nerdfonts_fonts:
+    #   - FiraCode
   hosts:
     home_desktop:
       ansible_host: 10.200.200.1
       ansible_user: anirudh
-    # work_macbook:
-    #   ansible_host: 10.0.0.24
-    #   ansible_user: aggaani
-  vars:
-    enable_brew: true
-    enable_git: true
-    enable_zsh: true
-    enable_nerd_fonts: true
-    enable_starship: true
-    enable_direnv: true
-    enable_podman: false
-    enable_nvim: true
-    enable_kubernetes: true
-    enable_1password: true
-    enable_nvm: true
-    enable_uv: true
-    enable_conda: true
-    enable_tfenv: true
-    enable_httpie: true
-    enable_precommit: true
-    starship_theme_preset: "catppuccin-powerline" # pastel-powerline, gruvbox-rainbow, catppuccin-powerline, jetpack
-    git_username: "Anirudh Aggarwal"
-    git_email: "16053724+ani1797@users.noreply.github.com"
-    nerdfonts_fonts:
-      - FiraCode
-          
+      git_username: "Anirudh Aggarwal"
+      git_email: "16053724+ani1797@users.noreply.github.com"
+    work_macbook:
+      ansible_host: 10.0.0.24
+      ansible_user: aggaani
+      git_username: "Anirudh Aggarwal"
+      git_email: "anirudh_aggarwal@manulife.ca"

@@ -46,6 +46,11 @@ copy() {
     fi
 }
 
+has() {
+    command -v "$1" &>/dev/null
+    return $?
+}
+
 # System Aliases
 alias ll='ls -alF'
 alias la='ls -A'
@@ -56,3 +61,7 @@ alias j='jobs -l'
 alias r='source ~/.zshrc'
 alias s='sudo'
 alias mkdir='mkdir -pv'
+
+if has "git"; then
+    alias g='git'
+fi

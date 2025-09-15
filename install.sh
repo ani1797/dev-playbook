@@ -44,3 +44,4 @@ install_ansible() {
 }
 
 install_ansible
+ansible-playbook playbook.yml 

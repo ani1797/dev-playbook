@@ -1,34 +1,49 @@
 ---
-- name: Change default shell to zsh for the user
+# Switch the user's shell to zsh if zsh_is_default is true
+- name: Get zsh path
+  ansible.builtin.command: which zsh
+  register: zsh_path_result
+  changed_when: false
+- name: Change shell to zsh for the user
   become: true
-  tags: config
   ansible.builtin.user:
     name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  when: zsh_is_default | default(false)
+    shell: "{{ zsh_path_result.stdout | default('/usr/bin/zsh', true) }}"
+  when:
+    - zsh_path_result.stdout != ""
+    - zsh_is_default | default(false)
 - name: Copy zshenv configuration file to user's home directory
-  tags: config
-  notify: ZSH reload shell
   ansible.builtin.template:
     src: zshenv.j2
     dest: "{{ ansible_env.HOME }}/.zshenv"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
-    mode: '0644'
+    mode: 0700
 - name: Copy zsh configuration file to user's home directory
-  tags: config
-  notify: ZSH reload shell
   ansible.builtin.template:
     src: zshrc.j2
     dest: "{{ ansible_env.HOME }}/.zshrc"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
-    mode: '0644'
+    mode: 0700
 - name: Ensure zsh plugins directory exists
-  tags: config
   ansible.builtin.file:
     path: "{{ zsh_plugins_dir }}"
     state: directory
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
-    mode: '0755'
+    mode: 0700
+- name: Ensure zsh completions directory exists
+  ansible.builtin.file:
+    path: "{{ zsh_completions_dir }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: 0700
+- name: Ensure zsh aliases file is present in plugins directory
+  ansible.builtin.copy:
+    src: aliases.zsh
+    dest: "{{ zsh_plugins_dir }}/aliases.zsh"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: 0700

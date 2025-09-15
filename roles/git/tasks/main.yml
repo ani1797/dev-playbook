@@ -1,9 +1,5 @@
 ---
-- name: Load OS-specific variables
-  ansible.builtin.include_vars:
-    file: "{{ ansible_os_family }}.yml"
-  failed_when: false
 - name: Include install tasks
-  ansible.builtin.import_tasks: install.yml
+  ansible.builtin.include_tasks: install.yml
 - name: Include configure tasks
-  ansible.builtin.import_tasks: configure.yml
+  ansible.builtin.include_tasks: configure.yml

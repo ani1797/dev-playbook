@@ -10,7 +10,7 @@
   ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.config/zsh/plugins/brew.zsh"
     create: true
-    mode: '0744'
+    mode: '0700'
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
     content: |
