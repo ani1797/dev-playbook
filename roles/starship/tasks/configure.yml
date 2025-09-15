@@ -13,6 +13,7 @@
     - starship_theme_preset is not none
     - starship_presets.stdout_lines is defined
     - starship_theme_preset in starship_presets.stdout_lines
+    - starship_custom_config is not defined
 - name: Apply the starship theme preset configuration
   become: true
   ansible.builtin.copy:
@@ -25,3 +26,11 @@
     - starship_theme_preset is not none
     - starship_presets.stdout_lines is defined
     - starship_theme_preset in starship_presets.stdout_lines
+    - starship_custom_config is not defined
+- name: Deploy custom starship config if provided
+  ansible.builtin.copy:
+    src: "{{ starship_custom_config }}"
+    dest: "{{ ansible_env.HOME }}/.config/starship.toml"
+    mode: '0644'
+  when:
+    - starship_custom_config is defined

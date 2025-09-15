@@ -17,7 +17,7 @@
     enable_conda: true
     enable_tfenv: true
     enable_httpie: true
-    starship_theme_preset: "tokyo-night"
+    starship_theme_preset: "catppuccin-powerline" # pastel-powerline, gruvbox-rainbow, catppuccin-powerline, jetpack
     git_username: "Anirudh Aggarwal"
     git_email: "16053724+ani1797@users.noreply.github.com"
     nerdfonts_fonts:
