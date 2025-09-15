@@ -35,6 +35,9 @@
 
       # Load .oprc if it exists
       use oprc
+
+      # Load pre-commit if it exists
+      use precommit
     dest: "{{ direnv_config_dir }}/direnvrc"
     mode: '0730'
     owner: "{{ ansible_user_id }}"
