@@ -3,7 +3,10 @@
 set -euo pipefail
 
 detect_os() {
-    if [ -f /etc/os-release ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        OS="darwin"
+        VERSION_ID=$(sw_vers -productVersion)
+    elif [ -f /etc/os-release ]; then
         . /etc/os-release
         OS=$ID
         VERSION_ID=$VERSION_ID
