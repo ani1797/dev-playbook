@@ -11,4 +11,3 @@
   ansible.builtin.command: /tmp/starship_install.sh -f -y --bin-dir "{{ starship_install_path }}"
   args:
     creates: "{{ starship_install_path }}/starship"
-  notify: Configure shell to use starship

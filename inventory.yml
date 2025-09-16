@@ -3,6 +3,8 @@ all:
     zsh_enabled: true
     git_enabled: true
     brew_enabled: true
+    starship_enabled: true
+    starship_theme_preset: "catppuccin-powerline"
     zsh_plugins_dir: "{{ ansible_env.HOME }}/.config/zsh/plugins"
     zsh_completions_dir: "{{ ansible_env.HOME }}/.config/zsh/completions"
 
@@ -30,6 +32,7 @@ all:
       ansible_user: anirudh
       git_username: "Anirudh Aggarwal"
       git_email: "16053724+ani1797@users.noreply.github.com"
+      
     work_macbook:
       ansible_host: 10.0.0.24
       ansible_user: aggaani

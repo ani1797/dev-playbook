@@ -14,6 +14,10 @@
       when: git_enabled | default(false)
       ansible.builtin.include_role:
         name: git
+    - name: Include starship role
+      when: starship_enabled | default(false)
+      ansible.builtin.include_role:
+        name: starship
 
     # - name: Include podman role
     #   when: enable_podman | default(false)
@@ -23,10 +27,7 @@
     #   when: enable_nerd_fonts | default(false)
     #   ansible.builtin.import_role:
     #     name: nerdfonts
-    # - name: Include starship role
-    #   when: enable_starship | default(false)
-    #   ansible.builtin.import_role:
-    #     name: starship
+
     # - name: Include direnv role
     #   when: enable_direnv | default(false)
     #   ansible.builtin.import_role:

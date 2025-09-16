@@ -1,12 +1,16 @@
 ---
+- name: Find the starship binary
+  register: starship_path
+  changed_when: false
+  ansible.builtin.command: which starship
+  failed_when: starship_path.rc not in [0,1]
 - name: Check for available theme presets
-  tags: info
   register: starship_presets
   changed_when: false
-  ansible.builtin.command: starship preset --list
+  ansible.builtin.command: "{{ starship_install_path }}/starship preset --list"
   when: starship_theme_preset is not none
 - name: Load the starship theme preset configuration
-  ansible.builtin.command: starship preset -o  "/tmp/starship_{{ starship_theme_preset }}" "{{ starship_theme_preset }}"
+  ansible.builtin.command: "{{ starship_install_path }}/starship preset -o '/tmp/starship_{{ starship_theme_preset }}' '{{ starship_theme_preset }}'"
   args:
     creates: "/tmp/starship_{{ starship_theme_preset }}"
   when:
@@ -15,13 +19,11 @@
     - starship_theme_preset in starship_presets.stdout_lines
     - starship_custom_config is not defined
 - name: Apply the starship theme preset configuration
-  become: true
   ansible.builtin.copy:
     src: "/tmp/starship_{{ starship_theme_preset }}"
     dest: "{{ starship_config_file }}"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-    mode: '0644'
+    remote_src: yes
+    mode: 0600
   when:
     - starship_theme_preset is not none
     - starship_presets.stdout_lines is defined
@@ -30,7 +32,30 @@
 - name: Deploy custom starship config if provided
   ansible.builtin.copy:
     src: "{{ starship_custom_config }}"
-    dest: "{{ ansible_env.HOME }}/.config/starship.toml"
-    mode: '0644'
+    dest: "{{ starship_config_file }}"
+    mode: 0600
   when:
     - starship_custom_config is defined
+- name: Configure shell to use starship
+  ansible.builtin.blockinfile:
+    marker: "# {mark} starship configuration"
+    path: "{{ starship_zsh_hook_file }}"
+    create: true
+    mode: 0700
+    content: |
+      # Starship prompt initialization
+      eval "$(starship init zsh)"
+  args:
+    create: "{{ starship_zsh_hook_file }}"
+- name: Configure shell completions for starship
+  ansible.builtin.blockinfile:
+    marker: "# {mark} starship completions"
+    path: "{{ starship_zsh_completions_file }}"
+    create: true
+    mode: 0700
+    content: |
+      if type starship &>/dev/null; then
+        source <(starship completions zsh)
+      fi
+  args:
+    create: "{{ starship_zsh_completions_file }}"
