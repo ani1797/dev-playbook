@@ -34,7 +34,7 @@
   ansible.builtin.file:
     path: "{{ nerdfonts_install_path }}"
     state: directory
-    mode: '0755'
+    mode: '0777'
 - name: Unzip downloaded fonts
   ansible.builtin.unarchive:
     src: "{{ nerdfonts_temp_dir_stat.path }}/{{ item }}.{{ nerdfonts_download_ext }}"
@@ -53,7 +53,7 @@
     src: "{{ item.path }}"
     dest: "{{ nerdfonts_install_path }}"
     remote_src: true
-    mode: '0644'
+    mode: '0700'
   loop: "{{ nerdfonts_found_fonts.files }}"
   loop_control:
     label: "{{ item.path }}"
