@@ -1,0 +1,51 @@
+[global]
+quiet = true
+verbose = 0
+timeout = 30
+retries = 3
+
+{% if python_pip_cache_dir is defined %}
+# PIP cache settings
+cache-dir = {{ python_pip_cache_dir }}
+no_cache_dir = false
+{% endif %}
+
+# Assuming always using the compatible version of pip for that specified python version from virtual environment.
+disable-pip-version-check = true
+
+# Enforcing virtual environment usage.
+require-virtualenv = true
+
+# Primary index
+index-url = {{ (python_pip_remotes | selectattr('name', 'equalto', python_pip_primary_index) | map(attribute='url') | list | first) }}
+
+# Extra index
+{% for remote in python_pip_remotes %}
+extra-index-url = {{ remote.url }}
+{% endfor %}
+
+{% set trusted_hosts = python_pip_remotes | selectattr('verify_ssl', 'equalto', False) | map(attribute='host') | list %}
+{% if trusted_hosts %}
+# Trusted hosts (for non-SSL verified hosts)
+trusted-host = {{ trusted_hosts | join(' ') }}
+{% endif %}
+
+[install]
+user = true
+no-compile = false
+no-dependencies = false
+ignore-installed = true
+no-warn-script-location = false
+
+[freeze]
+local = true
+timeout = 10
+
+[download]
+use-cache = true
+
+[wheel]
+wheel-dir = ~/.cache/pip/wheels
+
+[uninstall]
+yes = true

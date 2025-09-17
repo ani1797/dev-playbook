@@ -1,0 +1,47 @@
+---
+- name: Get latest k9s version
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/derailed/k9s/releases/latest
+    return_content: true
+  register: kubernetes_k9s_release
+- name: Set k9s download URL
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.set_fact:
+    k9s_download_url: >-
+      https://github.com/derailed/k9s
+      /releases/download/{{ kubernetes_k9s_release.json.tag_name }}
+      /k9s_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz
+- name: Download and extract k9s
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.unarchive:
+    src: "{{ k9s_download_url | trim | replace(' ', '') }}"
+    dest: /tmp/
+    remote_src: true
+  environment:
+    PATH: "/usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH | default('') }}"
+- name: Move k9s binary to /usr/local/bin
+  when: ansible_facts['os_family'] != 'Darwin'
+  become: true
+  ansible.builtin.copy:
+    remote_src: true
+    src: /tmp/k9s
+    dest: /usr/local/bin/k9s
+    mode: "0777"
+- name: Install k9s on macOS
+  when: ansible_facts['os_family'] == 'Darwin'
+  homebrew:
+    name: k9s
+    state: present
+- name: Configure k9s completion for zsh
+  tags: config
+  ansible.builtin.blockinfile:
+    marker: "# {mark} k9s configuration"
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_k9s"
+    create: true
+    mode: '0744'
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    content: |
+      # k9s configuration
+      source <(k9s completion zsh)

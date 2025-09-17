@@ -1,0 +1,16 @@
+preview = true
+native-tls = true
+compile-bytecode = false
+
+
+{% for remotes in python_pip_remotes %}
+[[index]]
+name = "{{ remotes.name }}"
+url = "{{ remotes.url }}"
+{% if remotes.default is defined and remotes.default %}default = true{% endif %}
+{% if remotes.explicit is defined and remotes.explicit %}explicit = true{% endif %}
+{% endfor %}
+
+{% if python_uv_extra_configs is defined and python_uv_extra_configs is not none %}
+{{ python_uv_extra_configs | indent(0) }}
+{% endif %}

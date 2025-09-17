@@ -18,6 +18,30 @@
       when: starship_enabled | default(false)
       ansible.builtin.include_role:
         name: starship
+    - name: Include direnv role
+      when: direnv_enabled | default(false)
+      ansible.builtin.import_role:
+        name: direnv
+    - name: Include python role
+      when: python_enabled | default(false)
+      ansible.builtin.include_role:
+        name: python
+    - name: Include warp.dev terminal role
+      when: warp_enabled | default(false)
+      ansible.builtin.include_role:
+        name: warp
+    - name: Include kubernetes role
+      when: kubernetes_enabled | default(false)
+      ansible.builtin.import_role:
+        name: kubernetes
+    - name: Include onepassword role
+      when: onepassword_enabled | default(false)
+      ansible.builtin.import_role:
+        name: onepassword
+    - name: Include nvm role
+      when: nvm_enabled | default(false)
+      ansible.builtin.import_role:
+        name: nvm
 
     # - name: Include podman role
     #   when: enable_podman | default(false)
@@ -27,27 +51,10 @@
     #   when: enable_nerd_fonts | default(false)
     #   ansible.builtin.import_role:
     #     name: nerdfonts
-
-    # - name: Include direnv role
-    #   when: enable_direnv | default(false)
-    #   ansible.builtin.import_role:
-    #     name: direnv
     # - name: Include nvim role
     #   when: enable_nvim | default(false)
     #   ansible.builtin.import_role:
     #     name: nvim
-    # - name: Include kubernetes role
-    #   when: enable_kubernetes | default(false)
-    #   ansible.builtin.import_role:
-    #     name: kubernetes
-    # - name: Include onepassword role
-    #   when: enable_1password | default(false)
-    #   ansible.builtin.import_role:
-    #     name: onepassword
-    # - name: Include nvm role
-    #   when: enable_nvm | default(false)
-    #   ansible.builtin.import_role:
-    #     name: nvm
     # - name: Include uv role
     #   ansible.builtin.import_role:
     #     name: uv

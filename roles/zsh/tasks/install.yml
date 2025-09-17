@@ -16,8 +16,3 @@
     name: zsh
     state: present
   when: ansible_os_family == "Archlinux"
-- name: Ensure zsh is installed (macOS)
-  when: ansible_os_family == 'Darwin'
-  community.general.homebrew:
-    name: zsh
-    state: present

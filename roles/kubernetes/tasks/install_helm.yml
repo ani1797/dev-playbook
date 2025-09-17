@@ -1,0 +1,38 @@
+- name: Get latest helm version
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/helm/helm/releases/latest
+    return_content: true
+  register: kubernetes_helm_release
+- name: Download and extract helm
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.unarchive:
+    src: "https://get.helm.sh/helm-{{ kubernetes_helm_release.json.tag_name }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz"
+    dest: /tmp/
+    remote_src: true
+- name: Move helm binary to /usr/local/bin
+  become: true
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.copy:
+    remote_src: true
+    src: "/tmp/{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64/helm"
+    dest: /usr/local/bin/helm
+    mode: "0777"
+- name: Install helm on macOS
+  when: ansible_facts['os_family'] == 'Darwin'
+  homebrew:
+    name: helm
+    state: present
+- name: Configure helm completion for zsh
+  ansible.builtin.blockinfile:
+    marker: "# {mark} helm configuration"
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_helm"
+    create: true
+    mode: '0700'
+    content: |
+      # Helm configuration
+      source <(helm completion zsh)
+      # Configuring helm alias to point to helm
+      alias h=helm
+      # Assign completion for helm alias to helm completion
+      compdef h=helm

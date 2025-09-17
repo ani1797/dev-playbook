@@ -65,3 +65,11 @@ alias mkdir='mkdir -pv'
 if has "git"; then
     alias g='git'
 fi
+
+
+# Configuring hash directories for commom folders
+hash -d docs=~/Documents
+hash -d down=~/Downloads
+hash -d projects=~/Projects
+hash -d dev=~/Projects/personal
+hash -d work=~/Projects/work

@@ -1,12 +1,30 @@
 all:
   vars:
     zsh_enabled: true
+    zsh_plugins_dir: "{{ ansible_env.HOME }}/.config/zsh/plugins"
+    zsh_completions_dir: "{{ ansible_env.HOME }}/.config/zsh/completions"
     git_enabled: true
+    git_username: "Anirudh Aggarwal"
+    git_email: "16053724+ani1797@users.noreply.github.com"
     brew_enabled: true
     starship_enabled: true
     starship_theme_preset: "catppuccin-powerline"
-    zsh_plugins_dir: "{{ ansible_env.HOME }}/.config/zsh/plugins"
-    zsh_completions_dir: "{{ ansible_env.HOME }}/.config/zsh/completions"
+    python_enabled: true
+    python_direnv_integrated: true
+    python_uv_autoactivate: true
+    warp_enabled: false
+    direnv_enabled: true
+    kubernetes_enabled: true
+    kubernetes_installs:
+      - kubectl
+      - k9s
+      - kubie
+      - helm
+      - flux
+      - kubeseal
+      - kind
+    onepassword_enabled: true
+    nvm_enabled: true
 
     # enable_nerd_fonts: true
     # enable_starship: true
@@ -30,11 +48,37 @@ all:
     home_desktop:
       ansible_host: 10.200.200.1
       ansible_user: anirudh
-      git_username: "Anirudh Aggarwal"
-      git_email: "16053724+ani1797@users.noreply.github.com"
-      
     work_macbook:
-      ansible_host: 10.0.0.24
+      ansible_host: 127.0.0.1
       ansible_user: aggaani
-      git_username: "Anirudh Aggarwal"
-      git_email: "anirudh_aggarwal@manulife.ca"
+      python_pip_primary_index: mfc-ca
+      python_pip_remotes:
+        - name: pypi
+          url: https://pypi.org/simple
+          verify_ssl: true
+        - name: pypi-alternate
+          url: https://pypi.python.org/simple
+          verify_ssl: true
+        - name: pypi-file
+          url: https://files.pythonhosted.org/packages
+          verify_ssl: true
+        - name: pytorch-cpu
+          url: https://download.pytorch.org/whl/cpu
+          explicit: true
+          verify_ssl: true
+        - name: pytorch-cu118
+          url: https://download.pytorch.org/whl/cu118
+          explicit: true
+          verify_ssl: true
+        - name: pytorch-cu124
+          url: https://download.pytorch.org/whl/cu124
+          explicit: true
+          verify_ssl: true
+        - name: mfc-ca
+          url: https://artifactory.manulife.ca/artifactory/api/pypi/pypi/simple
+          default: true
+          verify_ssl: false
+        - name: mfc-global
+          url: https://artifactory.platform.manulife.io/artifactory/api/pypi/pypi/simple
+          verify_ssl: false
+          default: true

@@ -1,0 +1,37 @@
+- name: Get latest kubeseal version
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/bitnami-labs/sealed-secrets/releases/latest
+    return_content: true
+  register: kubeseal_release
+- name: Set kubeseal download URL
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.set_fact:
+    kubeseal_download_url: >-
+      https://github.com/bitnami-labs/sealed-secrets/releases/download/{{ kubeseal_release.json.tag_name }}
+      /kubeseal-{{ kubeseal_release.json.tag_name | regex_replace('^v', '') }}-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64.tar.gz
+- name: Download and extract kubeseal binary
+  when: ansible_facts['os_family'] != 'Darwin'
+  become: true
+  ansible.builtin.unarchive:
+    src: "{{ kubeseal_download_url | trim | replace(' ', '') }}"
+    dest: /usr/local/bin/
+    remote_src: true
+    mode: '0777'
+    include:
+      - kubeseal
+  args:
+    creates: /usr/local/bin/kubeseal
+- name: Install kubeseal on macOS
+  when: ansible_facts['os_family'] == 'Darwin'
+  homebrew:
+    name: kubeseal
+    state: present
+- name: Install kubeseal zsh completions
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_kubeseal"
+    create: true
+    mode: '0700'
+    content: |
+      # Adding kse as an alias for kubeseal
+      alias kse=kubeseal

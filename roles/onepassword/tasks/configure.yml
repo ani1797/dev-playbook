@@ -1,0 +1,21 @@
+---
+- name: Configure onepassword completion for zsh
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_onepassword"
+    create: true
+    mode: '0700'
+    content: |
+      # OnePassword CLI completion
+      if type op &>/dev/null; then
+        source <(op completion zsh)
+      fi
+- name: Detect the direnv plugins directory
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/direnv/lib"
+  register: onepassword_direnv_lib_dir
+- name: Copy the op direnv extension
+  ansible.builtin.copy:
+    src: op.sh
+    dest: "{{ ansible_env.HOME }}/.config/direnv/lib/op.sh"
+    mode: '0700'
+  when: onepassword_direnv_lib_dir.stat.exists

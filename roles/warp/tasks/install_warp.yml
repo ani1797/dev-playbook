@@ -1,0 +1,43 @@
+---
+- name: Ensure warp is installed (MacOS)
+  community.general.homebrew:
+    name: warp
+    state: present
+  when:
+    - ansible_facts['os_family'] == 'Darwin'
+- name: Ensure warp is installed (Linux)
+  block:
+    - name: Download warp .deb package
+      ansible.builtin.get_url:
+        url: https://app.warp.dev/download?package=deb
+        dest: /tmp/warp-latest-amd64.deb
+        mode: '0644'
+    - name: Install warp .deb package
+      ansible.builtin.apt:
+        deb: /tmp/warp-latest-amd64.deb
+        state: present
+      become: true
+    - name: Remove warp .deb package
+      ansible.builtin.file:
+        path: /tmp/warp-latest-amd64.deb
+        state: absent
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+- name: Ensure warp is installed (RedHat)
+  block:
+    - name: Download warp .rpm package
+      ansible.builtin.get_url:
+        url: https://app.warp.dev/download?package=rpm
+        dest: /tmp/warp-latest-x86_64.rpm
+        mode: '0644'
+    - name: Install warp .rpm package
+      ansible.builtin.yum:
+        name: /tmp/warp-latest-x86_64.rpm
+        state: present
+      become: true
+    - name: Remove warp .rpm package
+      ansible.builtin.file:
+        path: /tmp/warp-latest-x86_64.rpm
+        state: absent
+  when:
+    - ansible_facts['os_family'] == 'RedHat'

@@ -1,0 +1,13 @@
+---
+- name: Include tasks for installing pyenv
+  ansible.builtin.include_tasks: install_pyenv.yml
+- name: Include tasks for configuring pyenv
+  ansible.builtin.include_tasks: configure_pyenv.yml
+- name: Include tasks for configuring pip
+  ansible.builtin.include_tasks: configure_pip.yml
+- name: Include tasks for installing uv
+  ansible.builtin.include_tasks: install_uv.yml
+- name: Include tasks for configuring uv
+  ansible.builtin.include_tasks: configure_uv.yml
+- name: Include tasks for configuring conda
+  ansible.builtin.include_tasks: configure_conda.yml

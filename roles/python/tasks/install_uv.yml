@@ -7,4 +7,4 @@
 - name: Run the uv install script
   ansible.builtin.command: /tmp/uv-install.sh
   args:
-    creates: /usr/local/bin/uv
+    creates: "{{ ansible_facts.env.HOME }}/.local/bin/uv"

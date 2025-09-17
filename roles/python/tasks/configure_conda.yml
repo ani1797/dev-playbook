@@ -1,0 +1,6 @@
+---
+- name: Ensure conda configuration is present
+  ansible.builtin.template:
+    src: conda.yaml.j2
+    dest: "{{ ansible_env.HOME }}/.condarc"
+    mode: '0600'

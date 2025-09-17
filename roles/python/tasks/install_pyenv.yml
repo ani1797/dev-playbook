@@ -1,0 +1,14 @@
+---
+- name: Install pyenv (RedHat, Debian)
+  ansible.builtin.git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: "{{ ansible_env.HOME }}/.pyenv"
+    update: yes
+  when:
+    - ansible_facts['os_family'] in ['RedHat', 'Debian']
+- name: Install pyenv (MacOS)
+  community.general.homebrew:
+    name: pyenv
+    state: present
+  when:
+    - ansible_facts['os_family'] == 'Darwin'

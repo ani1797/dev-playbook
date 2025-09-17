@@ -1,0 +1,18 @@
+---
+- name: Get latest kubie version
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/sbstp/kubie/releases/latest
+    return_content: true
+  register: kubernetes_kubie_release
+- name: Set kubie download URL
+  ansible.builtin.set_fact:
+    kubie_download_url: >-
+      https://github.com/sbstp/kubie
+      /releases/download/{{ kubernetes_kubie_release.json.tag_name }}
+      /kubie-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64
+- name: Download kubie binary
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ kubie_download_url | trim | replace(' ', '') }}"
+    dest: /usr/local/bin/kubie
+    mode: "0777"

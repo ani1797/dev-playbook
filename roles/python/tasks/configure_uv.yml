@@ -1,0 +1,49 @@
+---
+- name: Ensure uv config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/uv"
+    state: directory
+    mode: '0700'
+- name: Ensure uv config file exists
+  ansible.builtin.template:
+    src: uv.toml.j2
+    dest: "{{ ansible_env.HOME }}/.config/uv/uv.toml"
+    mode: '0600'
+- name: Ensure uv completions are installed
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_uv"
+    create: true
+    mode: '0700'
+    content: |
+      # uv and uvx zsh completions
+      if type uv &>/dev/null; then
+        source <(uv generate-shell-completion zsh)
+        source <(uvx --generate-shell-completion zsh)
+      fi
+- name: Ensure uv direnv integration is available
+  when: python_direnv_integrated | default(false)
+  block:
+  - name: Ensure direnv lib dir exists
+    ansible.builtin.file:
+      path: "{{ ansible_env.HOME }}/.config/direnv/lib"
+      state: directory
+      mode: '0700'
+  - name: Ensure uv direnv integration is loaded
+    ansible.builtin.copy:
+      src: uv.sh
+      dest: "{{ ansible_env.HOME }}/.config/direnv/lib/uv.sh"
+      mode: '0700'
+- name: Enable auto-activation of uv in direnv
+  when:
+    - direnv_enabled | default(false)
+    - python_direnv_integrated | default(false)
+    - python_uv_autoactivate | default(false)
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/direnv/direnvrc"
+    create: true
+    mode: '0700'
+    content: |
+      if [[ -f pyproject.toml || -f requirements.txt ]]; then
+        layout uv
+      fi
+    marker: "# {mark}: uv auto-activation on pyproject.toml or requirements.txt presence"

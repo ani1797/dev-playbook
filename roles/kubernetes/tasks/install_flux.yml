@@ -1,0 +1,48 @@
+---
+- name: Get latest flux version
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/fluxcd/flux2/releases/latest
+    return_content: true
+  register: kubernetes_flux_release
+- name: Set flux download URL
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.set_fact:
+    flux_download_url: >-
+      https://github.com/fluxcd/flux2/releases/download/{{ kubernetes_flux_release.json.tag_name }}
+      /flux_{{ kubernetes_flux_release.json.tag_name | regex_replace('^v', '') }}_{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}_amd64.tar.gz
+- name: Download and extract flux
+  when: ansible_facts['os_family'] != 'Darwin'
+  ansible.builtin.unarchive:
+    src: "{{ flux_download_url | trim | replace(' ', '') }}"
+    dest: /tmp/
+    remote_src: true
+- name: Move flux binary to /usr/local/bin
+  when: ansible_facts['os_family'] != 'Darwin'
+  become: true
+  ansible.builtin.copy:
+    remote_src: true
+    src: "/tmp/flux"
+    dest: /usr/local/bin/flux
+    mode: "0777"
+# Tap the fluxcd/tap repository to get the latest version of flux
+- name: Tap the fluxcd/tap repository
+  when: ansible_facts['os_family'] == 'Darwin'
+  homebrew_tap:
+    name: fluxcd/tap
+    state: present
+- name: Install flux on macOS
+  when: ansible_facts['os_family'] == 'Darwin'
+  homebrew:
+    name: fluxcd/tap/flux
+    state: present
+- name: Configure flux completion for zsh
+  tags: config
+  ansible.builtin.blockinfile:
+    marker: "# {mark} flux configuration"
+    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_flux"
+    create: true
+    mode: '0700'
+    content: |
+      # Flux configuration
+      source <(flux completion zsh)

@@ -17,9 +17,3 @@
     dest: /usr/local/bin
     mode: '0755'
     remote_src: true
-- name: Flush the handlers
-  ansible.builtin.meta: flush_handlers
-- name: Clean up the onepassword CLI zip file
-  ansible.builtin.file:
-    path: "/tmp/op_linux_amd64_{{ onepassword_version }}.zip"
-    state: absent

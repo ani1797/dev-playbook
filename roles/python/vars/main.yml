@@ -1,0 +1,13 @@
+python_pip_primary_index: pypi
+python_pip_remotes:
+  - name: pypi
+    url: https://pypi.org/simple
+    verify_ssl: true
+  - name: pypi-alternate
+    url: https://pypi.python.org/simple
+    verify_ssl: true
+  - name: pypi-file
+    url: https://files.pythonhosted.org/packages
+    verify_ssl: true
+python_pip_cache_dir: ~/.cache/pip
+python_uv_extra_configs: null
