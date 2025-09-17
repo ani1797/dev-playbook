@@ -39,7 +39,7 @@ all:
       ansible_host: 10.200.200.1
       ansible_user: anirudh
     work_macbook:
-      ansible_host: 127.0.0.1
+      ansible_host: 10.0.0.24
       ansible_user: aggaani
       python_pip_primary_index: mfc-ca
       python_pip_remotes:
