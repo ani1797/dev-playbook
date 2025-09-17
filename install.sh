@@ -47,4 +47,4 @@ install_ansible() {
 }
 
 install_ansible
-ansible-playbook playbook.yml 
+ansible-playbook -i inventory.yml -l localhost playbook.yml 
