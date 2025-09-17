@@ -66,3 +66,7 @@
       when: nvim_enabled | default(false)
       ansible.builtin.import_role:
         name: nvim
+    - name: Include tmux role
+      when: tmux_enabled | default(false)
+      ansible.builtin.import_role:
+        name: tmux

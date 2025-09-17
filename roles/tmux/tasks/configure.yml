@@ -1,0 +1,22 @@
+---
+- name: Ensure tmux config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/tmux"
+    state: directory
+- name: Configure tmux
+  ansible.builtin.template:
+    src: tmux.conf.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.conf"
+- name: Ensure zsh plugins directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/zsh/plugins"
+    state: directory
+- name: Ensure tmux configuration gets sourced as plugin in zsh
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/tmux.zsh"
+    content: |
+      # Source tmux configuration
+      if [ -f "$HOME/.config/tmux/tmux.conf" ]; then
+        alias tmux="tmux -f $HOME/.config/tmux/tmux.conf"
+      fi
+    create: yes

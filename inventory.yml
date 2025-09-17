@@ -33,7 +33,8 @@ all:
     nerdfonts_enabled: true
     nerdfonts_fonts:
       - FiraCode
-    nvim_enabled: true    
+    nvim_enabled: true   
+    tmux_enabled: true 
   hosts:
     localhost:
       ansible_connection: local      
