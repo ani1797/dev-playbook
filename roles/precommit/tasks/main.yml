@@ -3,9 +3,7 @@
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/direnv/lib"
     state: directory
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0700'
   when:
     - enable_direnv | default(false)
     - precommit_enabled | default(false)
@@ -14,9 +12,7 @@
   ansible.builtin.copy:
     src: precommit.sh
     dest: "{{ ansible_env.HOME }}/.config/direnv/lib/precommit.sh"
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0700'
   when:
     - enable_direnv | default(false)
     - precommit_enabled | default(false)

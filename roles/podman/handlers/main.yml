@@ -6,9 +6,7 @@
     marker: "# {mark} podman configuration"
     path: "{{ podman_shell_config_file }}"
     create: true
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0700'
     content: |
       # Podman configuration
       source <(podman completion zsh)

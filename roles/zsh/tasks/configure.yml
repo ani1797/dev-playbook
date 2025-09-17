@@ -16,34 +16,24 @@
   ansible.builtin.template:
     src: zshenv.j2
     dest: "{{ ansible_env.HOME }}/.zshenv"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
     mode: 0700
 - name: Copy zsh configuration file to user's home directory
   ansible.builtin.template:
     src: zshrc.j2
     dest: "{{ ansible_env.HOME }}/.zshrc"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
     mode: 0700
 - name: Ensure zsh plugins directory exists
   ansible.builtin.file:
     path: "{{ zsh_plugins_dir }}"
     state: directory
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
     mode: 0700
 - name: Ensure zsh completions directory exists
   ansible.builtin.file:
     path: "{{ zsh_completions_dir }}"
     state: directory
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
     mode: 0700
 - name: Ensure zsh aliases file is present in plugins directory
   ansible.builtin.copy:
     src: aliases.zsh
     dest: "{{ zsh_plugins_dir }}/aliases.zsh"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
     mode: 0700

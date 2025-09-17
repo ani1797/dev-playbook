@@ -4,8 +4,6 @@
     path: "{{ direnv_config_dir }}"
     state: directory
     mode: '0700'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
 - name: Ensure direnv lib directory exists
   ansible.builtin.file:
     path: "{{ direnv_config_dir }}/lib"

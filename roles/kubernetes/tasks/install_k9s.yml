@@ -39,9 +39,7 @@
     marker: "# {mark} k9s configuration"
     path: "{{ ansible_env.HOME }}/.config/zsh/completions/_k9s"
     create: true
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0700'
     content: |
       # k9s configuration
       source <(k9s completion zsh)

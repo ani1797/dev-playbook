@@ -15,8 +15,6 @@
     path: "{{ nerdfonts_temp_dir }}/nerdfonts_{{ nerdfonts_version }}"
     state: directory
     mode: '0755'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
   register: nerdfonts_temp_dir_stat
 - name: "Download the required Nerd Fonts"
   ansible.builtin.get_url:
@@ -56,8 +54,6 @@
     dest: "{{ nerdfonts_install_path }}"
     remote_src: true
     mode: '0644'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
   loop: "{{ nerdfonts_found_fonts.files }}"
   loop_control:
     label: "{{ item.path }}"
