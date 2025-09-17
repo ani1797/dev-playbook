@@ -1,23 +1,28 @@
 ---
 - name: Ensure luarocks is installed
   become: true
-  tags: install
+  when: ansible_os_family != "Darwin"
   ansible.builtin.package:
     name: luarocks
     state: present
 - name: Download latest Neovim AppImage
+  when: ansible_os_family != "Darwin"
   become: true
-  tags: install
   ansible.builtin.get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
     dest: /usr/local/bin/nvim
     mode: '0755'
 - name: Ensure additional nvim packages are installed
   become: true
-  tags: install
+  when: ansible_os_family != "Darwin"
   ansible.builtin.package:
     name:
       - ripgrep
       - fzf
       - fd-find
+    state: present
+- name: Ensure nvim in installed (on MacOS)
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: neovim
     state: present
