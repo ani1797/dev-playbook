@@ -3,10 +3,3 @@
   community.general.homebrew:
     name: tfenv
     state: present
-- name: Ensure tfenv hook for direnv is present
-  ansible.builtin.copy:
-    dest: "{{ ansible_env.HOME }}/.config/direnv/lib/tfenv.sh"
-    src: tfenv.sh
-    mode: '0755'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"

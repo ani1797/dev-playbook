@@ -6,6 +6,10 @@
     mode: '0744'
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
+  when:
+    - enable_direnv | default(false)
+    - precommit_enabled | default(false)
+    - precommit_direnv_integrated | default(false)
 - name: Ensure precommit directory exists
   ansible.builtin.copy:
     src: precommit.sh
@@ -13,3 +17,7 @@
     mode: '0744'
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gid }}"
+  when:
+    - enable_direnv | default(false)
+    - precommit_enabled | default(false)
+    - precommit_direnv_integrated | default(false)

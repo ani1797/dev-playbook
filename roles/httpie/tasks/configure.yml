@@ -8,6 +8,4 @@
   ansible.builtin.template:
     src: config.json.j2
     dest: "{{ ansible_env.HOME }}/.config/httpie/config.json"
-    mode: '0644'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0600'

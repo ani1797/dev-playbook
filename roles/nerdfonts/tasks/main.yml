@@ -32,6 +32,7 @@
   ansible.builtin.debug:
     var: nerdfonts_install_path
 - name: Ensure the fonts directory exists
+  become: true
   ansible.builtin.file:
     path: "{{ nerdfonts_install_path }}"
     state: directory
@@ -44,7 +45,7 @@
   loop: "{{ nerdfonts_fonts }}"
   loop_control:
     label: "{{ item }}"
-- name: "Find all fonts file found in {{ nerdfonts_temp_dir_stat.path }}"
+- name: "Find all fonts file found"
   ansible.builtin.find:
     paths: "{{ nerdfonts_temp_dir_stat.path }}"
     patterns: "*.{{ nerdfonts_font_ext }}"

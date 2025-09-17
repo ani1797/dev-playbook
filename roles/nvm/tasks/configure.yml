@@ -4,9 +4,7 @@
     marker: "# {mark} nvm configuration"
     path: "{{ ansible_env.HOME }}/.config/zsh/plugins/nvm.zsh"
     create: true
-    mode: '0744'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
+    mode: '0700'
     content: |
       # Load nvm if it exists
       export NVM_DIR="$HOME/.nvm"
@@ -16,6 +14,4 @@
     src: npmrc.j2
     dest: "{{ ansible_env.HOME }}/.npmrc"
     mode: '0600'
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
   when: nvm_enable_npmrc | default(false)

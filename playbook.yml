@@ -42,36 +42,23 @@
       when: nvm_enabled | default(false)
       ansible.builtin.import_role:
         name: nvm
-
-    # - name: Include podman role
-    #   when: enable_podman | default(false)
-    #   ansible.builtin.import_role:
-    #     name: podman
-    # - name: Include nerdfonts role
-    #   when: enable_nerd_fonts | default(false)
-    #   ansible.builtin.import_role:
-    #     name: nerdfonts
-    # - name: Include nvim role
-    #   when: enable_nvim | default(false)
-    #   ansible.builtin.import_role:
-    #     name: nvim
-    # - name: Include uv role
-    #   ansible.builtin.import_role:
-    #     name: uv
-    #   when: enable_uv | default(false)
-    # - name: Include conda role
-    #   ansible.builtin.import_role:
-    #     name: conda
-    #   when: enable_conda | default(false)
-    # - name: Include tfenv role
-    #   ansible.builtin.import_role:
-    #     name: tfenv
-    #   when: enable_tfenv | default(false)
-    # - name: Ensure httpie is installed
-    #   ansible.builtin.import_role:
-    #     name: httpie
-    #   when: enable_httpie | default(false)
-    # - name: Ensure precommit is installed
-    #   ansible.builtin.import_role:
-    #     name: precommit
-    #   when: enable_precommit | default(false)
+    - name: Include tfenv role
+      ansible.builtin.import_role:
+        name: tfenv
+      when: tfenv_enabled | default(false)
+    - name: Ensure precommit is installed
+      ansible.builtin.import_role:
+        name: precommit
+      when: precommit_enabled | default(false)
+    - name: Ensure httpie is installed
+      ansible.builtin.import_role:
+        name: httpie
+      when: httpie_enabled | default(false)
+    - name: Include nerdfonts role
+      when: nerdfonts_enabled | default(false)
+      ansible.builtin.import_role:
+        name: nerdfonts
+    - name: Include podman role
+      when: podman_enabled | default(false)
+      ansible.builtin.import_role:
+        name: podman

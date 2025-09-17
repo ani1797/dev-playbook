@@ -1,0 +1,8 @@
+---
+- name: Ensure tfenv hook for direnv is present
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/direnv/lib/tfenv.sh"
+    src: tfenv.sh
+    mode: '0700'
+  when:
+    - tfenv_direnv_integrated | default(false)

@@ -73,3 +73,19 @@ hash -d down=~/Downloads
 hash -d projects=~/Projects
 hash -d dev=~/Projects/personal
 hash -d work=~/Projects/work
+
+
+# Configuring terraform shorcuts
+if command -v terraform &>/dev/null; then
+    alias tf='terraform'
+    alias tfi='terraform init'
+    alias tfplan='terraform plan -out=/tmp/out.tfplan'
+    alias tfapply='terraform apply /tmp/out.tfplan'
+    alias tfda='terraform destroy -auto-approve'
+    alias tfd='terraform destroy'
+    alias tfv='terraform validate'
+    alias tff='terraform fmt -recursive'
+    alias tfl='terraform fmt -recursive && terraform validate && terraform plan'
+    alias tfc='terraform console'
+    alias tfs='terraform show'
+fi
