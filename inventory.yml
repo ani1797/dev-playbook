@@ -33,9 +33,7 @@ all:
     nerdfonts_enabled: true
     nerdfonts_fonts:
       - FiraCode
-
-    # enable_podman: false
-    
+    nvim_enabled: true    
   hosts:
     home_desktop:
       ansible_host: 10.200.200.1

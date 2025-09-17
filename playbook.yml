@@ -62,3 +62,7 @@
       when: podman_enabled | default(false)
       ansible.builtin.import_role:
         name: podman
+    - name: Include neovim role
+      when: nvim_enabled | default(false)
+      ansible.builtin.import_role:
+        name: nvim
