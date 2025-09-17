@@ -35,6 +35,8 @@ all:
       - FiraCode
     nvim_enabled: true    
   hosts:
+    localhost:
+      ansible_connection: local      
     home_desktop:
       ansible_host: 10.200.200.1
       ansible_user: anirudh
