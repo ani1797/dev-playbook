@@ -1,9 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.13"
-# dependencies = [
-#     "onepassword-sdk",
-# ]
+# dependencies = []
 # ///
 import os
 import json
@@ -36,7 +34,8 @@ def call(command: str) -> tuple[Value, Value]:
     else:
         return process.stdout.decode("utf-8"), None
 
-if __name__ == "__main__":
+
+def main():
     accounts = list(load_available_accounts())
     print("Available accounts:")
     for i, (vault, account) in enumerate(accounts):
@@ -84,3 +83,11 @@ if __name__ == "__main__":
             print(f"Error: {err}")
         else:
             print(res)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt as e:
+        print("\nOperation cancelled by user.")
+    except subprocess.CalledProcessError as e:
+        print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
