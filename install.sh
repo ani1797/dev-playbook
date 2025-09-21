@@ -38,6 +38,9 @@ install_ansible() {
         elif [[ "$OS" == "centos" || "$OS" == "rhel" || "$OS" == "fedora" ]]; then
             sudo yum install -y python3 python3-pip
             sudo yum install -y ansible ansible-lint
+        elif [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
+            sudo pacman -Syu --noconfirm
+            sudo pacman -S --noconfirm ansible ansible-lint
         else
             echo "Unsupported OS: $OS"
             exit 1
