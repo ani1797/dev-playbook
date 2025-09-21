@@ -31,6 +31,12 @@ install_ansible() {
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             fi
             brew install ansible ansible-lint
+        elif [[ "$OS" == "rocky" || "$OS" == "almalinux" ]]; then
+            sudo dnf install -y epel-release
+            sudo dnf install -y ansible ansible-lint
+        elif [[ "$OS" == "centos" || "$OS" == "rhel" || "$OS" == "fedora" ]]; then
+            sudo yum install -y epel-release
+            sudo yum install -y ansible ansible-lint
         else
             echo "Unsupported OS: $OS"
             exit 1
@@ -47,4 +53,4 @@ install_ansible() {
 }
 
 install_ansible
-ansible-playbook -i inventory.yml -l localhost playbook.yml 
+ansible-playbook -u $USER -i inventory.yml -l localhost playbook.yml 

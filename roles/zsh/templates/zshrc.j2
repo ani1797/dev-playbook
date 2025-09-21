@@ -29,13 +29,15 @@ setopt EXTENDED_GLOB # Enable extended globbing features like ** for recursive m
 if [ -f "$HOME/.zsh/plugins.zsh" ]; then
   source "$HOME/.zsh/plugins.zsh"
 fi
-if [ -f "$HOME/.zsh/aliases.zsh" ]; then
-  source "$HOME/.zsh/aliases.zsh"
-fi
 
 # Load all completions for zsh from the completions directory
 fpath=($HOME/.zsh/completions /usr/local/share/zsh/site-functions $fpath)
 autoload -Uz compinit && compinit -C
+
+if [ -f "$HOME/.zsh/aliases.zsh" ]; then
+  source "$HOME/.zsh/aliases.zsh"
+fi
+
 
 # Loading zprof module for profiling zsh startup time
 zmodload zsh/zprof
