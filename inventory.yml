@@ -37,13 +37,19 @@ all:
   hosts:
     localhost:
       ansible_connection: local
+personal:
+  hosts:
     home_desktop:
       ansible_host: 10.200.200.1
       ansible_user: anirudh
+
+work:
+  hosts:
     work_macbook:
       ansible_host: 10.0.0.24
       ansible_user: aggaani
       python_pip_primary_index: mfc-ca
+      nerdfonts_enabled: false
       python_pip_remotes:
         - name: pypi
           url: https://pypi.org/simple
@@ -74,4 +80,5 @@ all:
           url: https://artifactory.platform.manulife.io/artifactory/api/pypi/pypi/simple
           verify_ssl: false
           default: true
-      nerdfonts_enabled: false
+tests:
+  hosts: {}
