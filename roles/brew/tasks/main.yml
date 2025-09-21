@@ -2,11 +2,19 @@
 - name: Loading OS specific variables
   ansible.builtin.include_vars:
     file: "{{ ansible_os_family }}.yml"
+- name: Download the homebrew installation script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    dest: /tmp/install_homebrew.sh
+    mode: "0755"
+    force: no
 - name: Run the homebrew installation script
-  ansible.builtin.command: bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ansible.builtin.command: /tmp/install_homebrew.sh
   args:
     creates: "{{ brew_install_path }}/brew"
-- name: Ensure brew is in the PATH
+  environment:
+    NONINTERACTIVE: "1"
+- name: Ensure brew is in the PATH and shell environment is set up
   ansible.builtin.blockinfile:
     marker: "# {mark} brew configuration"
     path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
