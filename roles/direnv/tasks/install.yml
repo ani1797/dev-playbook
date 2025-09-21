@@ -1,9 +1,21 @@
 ---
+- name: Download the direnv install script
+  ansible.builtin.get_url:
+    url: https://direnv.net/install.sh
+    dest: /tmp/install_direnv.sh
+    mode: "0755"
+  when: ansible_os_family in ["Darwin", "RedHat"]
+- name: Run the direnv install script
+  ansible.builtin.command: /tmp/install_direnv.sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.direnv"
+  when: ansible_os_family in ["Darwin", "RedHat"]
 - name: Ensure direnv is installed
   become: true
   ansible.builtin.package:
     name: direnv
     state: present
+  when: ansible_os_family not in ["Darwin", "RedHat"]
 - name: Download direnv completion script for zsh
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/zsh-users/zsh-completions/refs/heads/master/src/_direnv"
