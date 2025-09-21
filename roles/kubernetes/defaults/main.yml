@@ -1,6 +1,8 @@
 kubernetes_os_map:
   Debian: linux
   Darwin: darwin
+  Archlinux: linux
+  RedHat: linux
 kubernetes_installs:
   - kubectl
   - k9s
