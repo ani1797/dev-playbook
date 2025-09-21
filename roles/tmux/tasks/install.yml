@@ -1,5 +1,6 @@
 ---
-- name: Install tmux on non macOS systems
+- name: Install tmux on Linux systems
+  become: true
   ansible.builtin.package:
     name: tmux
     state: present

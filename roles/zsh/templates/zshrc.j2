@@ -40,3 +40,8 @@ autoload -Uz compinit && compinit -C
 
 # Loading zprof module for profiling zsh startup time
 zmodload zsh/zprof
+
+# Allowing user's local zshenv overrides
+if [ -r "$HOME/.zshenv.local" ]; then
+  source "$HOME/.zshenv.local"
+fi

@@ -37,3 +37,9 @@
     src: aliases.zsh
     dest: "{{ zsh_plugins_dir }}/aliases.zsh"
     mode: 0700
+- name: Ensure all the files in bin/ are present in user's bin directory
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/bin/{{ item | basename }}"
+    mode: 0700
+  loop: "{{ lookup('ansible.builtin.fileglob', 'files/bin/*', wantlist=True) }}"
