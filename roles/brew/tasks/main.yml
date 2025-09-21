@@ -3,7 +3,7 @@
   ansible.builtin.include_vars:
     file: "{{ ansible_os_family }}.yml"
 - name: Run the homebrew installation script
-  ansible.builtin.command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ansible.builtin.command: bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   args:
     creates: "{{ brew_install_path }}/brew"
 - name: Ensure brew is in the PATH
