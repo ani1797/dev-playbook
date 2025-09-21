@@ -20,10 +20,10 @@
       fi
 - name: Generate the completion script for zsh
   ansible.builtin.command: "{{ ansible_env.HOME }}/.iximiuz/labctl/bin/labctl completion zsh"
-  register: iximuslab_zsh_completion
+  register: iximiuz_zsh_completion
   changed_when: false
 - name: Write the completion script to the appropriate location
   ansible.builtin.copy:
-    content: "{{ iximuslab_zsh_completion.stdout }}"
+    content: "{{ iximiuz_zsh_completion.stdout }}"
     dest: "{{ ansible_env.HOME }}/.zsh/completions/_labctl"
     mode: "0777"
