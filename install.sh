@@ -34,7 +34,7 @@ install_ansible() {
         elif [[ "$OS" == "rocky" || "$OS" == "almalinux" ]]; then
             sudo dnf install -y epel-release
             sudo dnf install -y python3 python3-pip
-            sudo dnf install -y ansible ansible-lint
+            sudo dnf install -y ansible
         elif [[ "$OS" == "centos" || "$OS" == "rhel" || "$OS" == "fedora" ]]; then
             sudo yum install -y epel-release
             sudo yum install -y python3 python3-pip
