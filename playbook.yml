@@ -66,3 +66,7 @@
       when: tmux_enabled | default(false)
       ansible.builtin.import_role:
         name: tmux
+    - name: Include iximuiz role
+      when: iximuiz_enabled | default(false)
+      ansible.builtin.import_role:
+        name: iximuiz

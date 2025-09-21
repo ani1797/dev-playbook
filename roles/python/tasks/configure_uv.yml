@@ -12,7 +12,7 @@
     mode: "0600"
 # Generate the uv shell completions for zsh and write to the appropriate location
 - name: Ensure uv zsh completion is generated
-  ansible.builtin.command: uv generate-shell-completion zsh
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/uv generate-shell-completion zsh"
   register: uv_zsh_completion
 - name: Write the uv zsh completion to the appropriate location
   ansible.builtin.copy:
@@ -21,7 +21,7 @@
     mode: "0777"
   when: uv_zsh_completion.stdout is defined and uv_zsh_completion.stdout != ""
 - name: Ensure uvx zsh completion is generated
-  ansible.builtin.command: uvx --generate-shell-completion zsh
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/uvx --generate-shell-completion zsh"
   register: uvx_zsh_completion
 - name: Write the uvx zsh completion to the appropriate location
   ansible.builtin.copy:
