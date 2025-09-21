@@ -36,8 +36,11 @@
   homebrew:
     name: fluxcd/tap/flux
     state: present
+- name: Find flux binary location
+  ansible.builtin.command: which flux
+  register: flux_binary_location
 - name: Generate the flux zsh completion
-  ansible.builtin.command: flux completion zsh
+  ansible.builtin.command: "{{ flux_binary_location.stdout }} completion zsh"
   register: flux_zsh_completion
 - name: Write the flux zsh completion to the appropriate location
   ansible.builtin.copy:

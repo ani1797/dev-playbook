@@ -11,7 +11,7 @@
     dest: /usr/local/bin/kind
     mode: "0777"
 - name: Ensure kind zsh completion is generated
-  ansible.builtin.command: kind completion zsh
+  ansible.builtin.command: /usr/local/bin/kind completion zsh
   register: kind_zsh_completion
 - name: Write the kind zsh completion to the appropriate location
   ansible.builtin.copy:
