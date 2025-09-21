@@ -1,0 +1,29 @@
+---
+- name: Download the iximuslab installation script
+  ansible.builtin.get_url:
+    url: https://labs.iximiuz.com/cli/install.sh
+    dest: /tmp/install_iximiuz.sh
+    mode: "0755"
+    force: no
+- name: Run the iximuslab installation script
+  ansible.builtin.command: /tmp/install_iximiuz.sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.iximus/bin/labctl"
+- name: Ensure iximuslab is in the PATH and shell environment is set up
+  ansible.builtin.blockinfile:
+    marker: "# {mark} iximuslab configuration"
+    path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
+    mode: "0700"
+    content: |
+      if [ -x "{{ ansible_env.HOME }}/.iximus/bin/labctl" ]; then
+        export PATH=$PATH:{{ ansible_env.HOME }}/.iximiuz/labctl/bin
+      fi
+- name: Generate the completion script for zsh
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.iximus/bin/labctl completion zsh"
+  register: iximuslab_zsh_completion
+  changed_when: false
+- name: Write the completion script to the appropriate location
+  ansible.builtin.copy:
+    content: "{{ iximuslab_zsh_completion.stdout }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_labctl"
+    mode: "0777"
