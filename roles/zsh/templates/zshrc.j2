@@ -34,6 +34,7 @@ fi
 fpath=($HOME/.zsh/completions /usr/local/share/zsh/site-functions $fpath)
 autoload -Uz compinit && compinit -C
 
+# Activating aliases and functions
 if [ -f "$HOME/.zsh/aliases.zsh" ]; then
   source "$HOME/.zsh/aliases.zsh"
 fi

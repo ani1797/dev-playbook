@@ -1,11 +1,6 @@
 ---
-- name: Ensure kubectl is installed
-  ansible.builtin.command: which kubectl
-  register: kubectl_check
-  ignore_errors: true
-  changed_when: false
 - name: Ensure kubectl zsh completion is generated
-  ansible.builtin.command: "{{ kubectl_check.stdout }} completion zsh"
+  ansible.builtin.command: "/usr/local/bin/kubectl completion zsh"
   register: kubectl_zsh_completion
   changed_when: false
   when: kubectl_check.stdout is defined and kubectl_check.stdout != ""
