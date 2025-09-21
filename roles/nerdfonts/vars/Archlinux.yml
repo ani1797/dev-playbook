@@ -1,0 +1,5 @@
+# Debian specific variables for Nerd Fonts installation
+---
+nerdfonts_install_path: "/home/{{ ansible_user_id }}/.local/share/fonts"
+nerdfonts_font_ext: "ttf"
+nerdfonts_temp_dir: "/tmp"

@@ -11,7 +11,7 @@
   ansible.builtin.get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
     dest: /usr/local/bin/nvim
-    mode: '0755'
+    mode: "0755"
 - name: Ensure additional nvim packages are installed
   become: true
   when: ansible_os_family != "Darwin"
@@ -19,7 +19,6 @@
     name:
       - ripgrep
       - fzf
-      - fd-find
     state: present
 - name: Ensure nvim in installed (on MacOS)
   when: ansible_os_family == "Darwin"
