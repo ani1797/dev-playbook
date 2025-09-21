@@ -26,10 +26,6 @@
       when: python_enabled | default(false)
       ansible.builtin.include_role:
         name: python
-    - name: Include warp.dev terminal role
-      when: warp_enabled | default(false)
-      ansible.builtin.include_role:
-        name: warp
     - name: Include kubernetes role
       when: kubernetes_enabled | default(false)
       ansible.builtin.import_role:
