@@ -33,10 +33,8 @@ install_ansible() {
             brew install ansible ansible-lint
         elif [[ "$OS" == "rocky" || "$OS" == "almalinux" ]]; then
             sudo dnf install -y epel-release
-            sudo dnf install -y python3 python3-pip
             sudo dnf install -y ansible
         elif [[ "$OS" == "centos" || "$OS" == "rhel" || "$OS" == "fedora" ]]; then
-            sudo yum install -y python3 python3-pip
             sudo yum install -y ansible ansible-lint
         elif [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
             sudo pacman -Syu --noconfirm
