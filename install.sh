@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export NONINTERACTIVE=${NONINTERACTIVE:-true}
+
 detect_os() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         OS="darwin"

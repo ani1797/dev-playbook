@@ -15,11 +15,11 @@
     path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
     mode: "0700"
     content: |
-      if [ -x "{{ ansible_env.HOME }}/.iximiuz/bin/labctl" ]; then
-        export PATH=$PATH:{{ ansible_env.HOME }}/.iximiuz/bin/labctl
+      if [ -x "{{ ansible_env.HOME }}/.iximiuz/labctl/bin/labctl" ]; then
+        export PATH="$PATH:{{ ansible_env.HOME }}/.iximiuz/labctl/bin"
       fi
 - name: Generate the completion script for zsh
-  ansible.builtin.command: "{{ ansible_env.HOME }}/.iximiuz/bin/labctl completion zsh"
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.iximiuz/labctl/bin/labctl completion zsh"
   register: iximuslab_zsh_completion
   changed_when: false
 - name: Write the completion script to the appropriate location
