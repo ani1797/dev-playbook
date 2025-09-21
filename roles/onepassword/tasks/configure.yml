@@ -1,14 +1,13 @@
 ---
+- name: Ensure onepassword zsh completion is generated
+  ansible.builtin.command: op completion zsh
+  register: onepassword_zsh_completion
 - name: Configure onepassword completion for zsh
   ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_onepassword"
+    path: "{{ ansible_env.HOME }}/.zsh/completions/_onepassword"
     create: true
     mode: "0700"
-    content: |
-      # OnePassword CLI completion
-      if type op &>/dev/null; then
-        source <(op completion zsh)
-      fi
+    content: "{{ onepassword_zsh_completion.stdout }}"
 - name: Detect the direnv plugins directory
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.config/direnv/lib"

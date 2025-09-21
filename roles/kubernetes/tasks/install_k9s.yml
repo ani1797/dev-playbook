@@ -33,13 +33,12 @@
   homebrew:
     name: k9s
     state: present
-- name: Configure k9s completion for zsh
-  tags: config
-  ansible.builtin.blockinfile:
-    marker: "# {mark} k9s configuration"
-    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_k9s"
-    create: true
-    mode: '0700'
-    content: |
-      # k9s configuration
-      source <(k9s completion zsh)
+- name: Generate the k9s zsh completion
+  ansible.builtin.command: k9s completion zsh
+  register: k9s_zsh_completion
+- name: Write the k9s zsh completion to the appropriate location
+  ansible.builtin.copy:
+    content: "{{ k9s_zsh_completion.stdout }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_k9s"
+    mode: "0777"
+  when: k9s_zsh_completion.stdout is defined and k9s_zsh_completion.stdout != ""

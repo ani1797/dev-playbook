@@ -25,18 +25,17 @@ setopt AUTO_CD # Change to a directory by typing its name
 setopt CD_ABLE_VARS # Allow changing to a directory by typing a variable name that contains the path to it
 setopt EXTENDED_GLOB # Enable extended globbing features like ** for recursive matching and ^ for negation in patterns
 
-{% if zsh_plugins_dir is defined %}
-# Load all plugins for zsh from the plugins directory
-for plugin in {{ zsh_plugins_dir }}/*.zsh; do
-  [[ -r $plugin ]] && source $plugin
-done
-{% endif %}
+# Activate the plugins in the plugins file
+if [ -f "$HOME/.zsh/plugins.zsh" ]; then
+  source "$HOME/.zsh/plugins.zsh"
+fi
+if [ -f "$HOME/.zsh/aliases.zsh" ]; then
+  source "$HOME/.zsh/aliases.zsh"
+fi
 
-{% if zsh_completions_dir is defined %}
 # Load all completions for zsh from the completions directory
-fpath=({{ zsh_completions_dir }} $fpath)
+fpath=($HOME/.zsh/completions /usr/local/share/zsh/site-functions $fpath)
 autoload -Uz compinit && compinit -C
-{% endif %}
 
 # Loading zprof module for profiling zsh startup time
 zmodload zsh/zprof

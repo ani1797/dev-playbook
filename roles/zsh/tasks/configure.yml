@@ -12,6 +12,12 @@
   when:
     - zsh_path_result.stdout != ""
     - zsh_is_default | default(false)
+- name: Ensure user's home has a .zsh directory for zsh configuration
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.zsh"
+    state: directory
+    mode: "0700"
+# Configure the user's zshenv and zshrc files
 - name: Copy zshenv configuration file to user's home directory
   ansible.builtin.template:
     src: zshenv.j2
@@ -22,20 +28,18 @@
     src: zshrc.j2
     dest: "{{ ansible_env.HOME }}/.zshrc"
     mode: 0700
-- name: Ensure zsh plugins directory exists
-  ansible.builtin.file:
-    path: "{{ zsh_plugins_dir }}"
-    state: directory
-    mode: 0700
+# Ensure the completions directory exists and is writable
 - name: Ensure zsh completions directory exists
+  become: true
   ansible.builtin.file:
     path: "{{ zsh_completions_dir }}"
     state: directory
-    mode: 0700
-- name: Ensure zsh aliases file is present in plugins directory
-  ansible.builtin.copy:
-    src: aliases.zsh
-    dest: "{{ zsh_plugins_dir }}/aliases.zsh"
+    mode: 0777
+# Ensure the user's local bin directory exists
+- name: Ensure user's local bin directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/bin/"
+    state: directory
     mode: 0700
 - name: Ensure all the files in bin/ are present in user's bin directory
   ansible.builtin.copy:
@@ -43,3 +47,13 @@
     dest: "{{ ansible_env.HOME }}/.local/bin/{{ item | basename }}"
     mode: 0700
   loop: "{{ lookup('ansible.builtin.fileglob', 'files/bin/*', wantlist=True) }}"
+  loop_control:
+    label: "{{ item | basename }}"
+- name: Ensure all the files in zsh/ are present in user's bin directory
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/{{ item | basename }}"
+    mode: 0700
+  loop: "{{ lookup('ansible.builtin.fileglob', 'files/zsh/*', wantlist=True) }}"
+  loop_control:
+    label: "{{ item | basename }}"

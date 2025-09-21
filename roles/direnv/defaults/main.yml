@@ -1,4 +1,3 @@
 ---
-direnv_shell_config_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/direnv.zsh"
 direnv_shell_completion_file: "{{ ansible_env.HOME }}/.config/zsh/completions/_direnv"
 direnv_config_dir: "{{ ansible_env.HOME }}/.config/direnv"

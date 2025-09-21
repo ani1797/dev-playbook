@@ -1,15 +1,12 @@
 ---
 - name: Ensure pyenv zsh hook is present
   ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/pyenv.zsh"
-    mode: '0700'
-    create: true
+    marker: "# {mark} pyenv configuration"
+    path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
+    mode: "0700"
     content: |
-      # Pyenv
       export PYENV_ROOT="$HOME/.pyenv"
       export PATH="$PYENV_ROOT/bin:$PATH"
       if command -v pyenv 1>/dev/null 2>&1; then
         eval "$(pyenv init - zsh)"
       fi
-  when:
-    - ansible_facts['os_family'] in ['RedHat', 'Debian', 'Darwin']

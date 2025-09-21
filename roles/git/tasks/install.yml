@@ -1,20 +1,8 @@
 ---
-- name: Ensure git is installed (Debian/Ubuntu/WSL)
+- name: Ensure git is installed (Linux)
   become: true
-  when: ansible_os_family == "Debian"
+  when: ansible_os_family != "Darwin"
   ansible.builtin.package:
-    name: git
-    state: present
-- name: Ensure git is installed (RedHat/Fedora)
-  become: true
-  when: ansible_os_family == "RedHat"
-  ansible.builtin.yum:
-    name: git
-    state: present
-- name: Ensure git is installed (Arch Linux)
-  become: true
-  when: ansible_os_family == "Archlinux"
-  community.general.pacman:
     name: git
     state: present
 - name: Ensure git is installed (macOS)

@@ -34,7 +34,7 @@
     state: directory
     mode: 0700
 - name: Load the global gitignore from toptal
-  when: 
+  when:
     - git_setup_global_ignore | default(true)
     - git_toptal_ignore_templates | length > 0
   ansible.builtin.get_url:

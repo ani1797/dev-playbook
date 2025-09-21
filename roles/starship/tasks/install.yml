@@ -4,7 +4,7 @@
   ansible.builtin.get_url:
     url: "{{ starship_installer_url }}"
     dest: /tmp/starship_install.sh
-    mode: '0755'
+    mode: "0755"
 - name: Install starship prompt
   become: true
   tags: install

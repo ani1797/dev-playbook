@@ -3,7 +3,7 @@
   ansible.builtin.get_url:
     url: https://astral.sh/uv/install.sh
     dest: /tmp/uv-install.sh
-    mode: '0700'
+    mode: "0700"
 - name: Run the uv install script
   ansible.builtin.command: /tmp/uv-install.sh
   args:

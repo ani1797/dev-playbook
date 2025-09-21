@@ -2,9 +2,9 @@
 - name: Ensure nvm completion and activation is in plugins directory
   ansible.builtin.blockinfile:
     marker: "# {mark} nvm configuration"
-    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/nvm.zsh"
+    path: "{{ ansible_env.HOME }}/.zsh/plugin.zsh"
     create: true
-    mode: '0700'
+    mode: "0700"
     content: |
       # Load nvm if it exists
       export NVM_DIR="$HOME/.nvm"
@@ -13,5 +13,5 @@
   ansible.builtin.template:
     src: npmrc.j2
     dest: "{{ ansible_env.HOME }}/.npmrc"
-    mode: '0600'
+    mode: "0600"
   when: nvm_enable_npmrc | default(false)

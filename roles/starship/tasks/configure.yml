@@ -1,14 +1,17 @@
 ---
+# Find existing starship installation
 - name: Find the starship binary
   register: starship_path
   changed_when: false
   ansible.builtin.command: which starship
   failed_when: starship_path.rc not in [0,1]
+# Find all the available presets if a preset is requested
 - name: Check for available theme presets
   register: starship_presets
   changed_when: false
   ansible.builtin.command: "{{ starship_install_path }}/starship preset --list"
   when: starship_theme_preset is not none
+# Download and configure the theme requested
 - name: Load the starship theme preset configuration
   ansible.builtin.command: "{{ starship_install_path }}/starship preset -o '/tmp/starship_{{ starship_theme_preset }}' '{{ starship_theme_preset }}'"
   args:
@@ -29,6 +32,7 @@
     - starship_presets.stdout_lines is defined
     - starship_theme_preset in starship_presets.stdout_lines
     - starship_custom_config is not defined
+# Override with custom config if provided
 - name: Deploy custom starship config if provided
   ansible.builtin.copy:
     src: "{{ starship_custom_config }}"
@@ -36,26 +40,26 @@
     mode: 0600
   when:
     - starship_custom_config is defined
+# Configure the shell to use starship when installed
 - name: Configure shell to use starship
   ansible.builtin.blockinfile:
     marker: "# {mark} starship configuration"
-    path: "{{ starship_zsh_hook_file }}"
-    create: true
+    path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
     mode: 0700
     content: |
       # Starship prompt initialization
-      eval "$(starship init zsh)"
-  args:
-    create: "{{ starship_zsh_hook_file }}"
-- name: Configure shell completions for starship
-  ansible.builtin.blockinfile:
-    marker: "# {mark} starship completions"
-    path: "{{ starship_zsh_completions_file }}"
-    create: true
-    mode: 0700
-    content: |
       if type starship &>/dev/null; then
-        source <(starship completions zsh)
+        eval "$(starship init zsh)"
       fi
-  args:
-    create: "{{ starship_zsh_completions_file }}"
+  when: starship_path.rc == 0
+# Set up completions for zsh if starship is installed
+- name: Get the starship completion script
+  ansible.builtin.command: "{{ starship_install_path }}/starship completions zsh"
+  register: starship_completions
+  when: starship_path.rc == 0
+- name: Ensure starship completions for zsh is installed
+  ansible.builtin.copy:
+    content: "{{ starship_completions.stdout }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_starship"
+    mode: 0700
+  when: starship_path.rc == 0 and starship_completions.stdout is defined

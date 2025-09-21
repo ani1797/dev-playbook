@@ -23,16 +23,25 @@
   homebrew:
     name: helm
     state: present
-- name: Configure helm completion for zsh
+- name: Ensure helm zsh completion is generated
+  ansible.builtin.command: helm completion zsh
+  register: helm_zsh_completion
+- name: Write the helm zsh completion to the appropriate location
+  ansible.builtin.copy:
+    content: "{{ helm_zsh_completion.stdout }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_helm"
+    mode: "0777"
+  when: helm_zsh_completion.stdout is defined and helm_zsh_completion.stdout != ""
+- name: Configure helm aliases for zsh
   ansible.builtin.blockinfile:
     marker: "# {mark} helm configuration"
-    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_helm"
+    path: "{{ ansible_env.HOME }}/.zsh/aliases.zsh"
     create: true
-    mode: '0700'
+    mode: "0700"
     content: |
-      # Helm configuration
-      source <(helm completion zsh)
-      # Configuring helm alias to point to helm
-      alias h=helm
-      # Assign completion for helm alias to helm completion
-      compdef h=helm
+      if type helm &>/dev/null; then
+        # Configuring helm alias to point to helm
+        alias h=helm
+        # Assign completion for helm alias to helm completion
+        compdef h=helm
+      fi

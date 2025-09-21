@@ -6,5 +6,5 @@
 - name: Download direnv completion script for zsh
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/zsh-users/zsh-completions/refs/heads/master/src/_direnv"
-    dest: "{{ direnv_shell_completion_file }}"
-    mode: "0700"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_direnv"
+    mode: "0777"

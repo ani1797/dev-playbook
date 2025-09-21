@@ -5,17 +5,17 @@
     return_content: true
   register: kubernetes_kind_release
 - name: Download kind binary
+  become: true
   ansible.builtin.get_url:
     url: "https://kind.sigs.k8s.io/dl/{{ kubernetes_kind_release.json.tag_name }}/kind-{{ kubernetes_os_map[ansible_facts['os_family']] | trim }}-amd64"
     dest: /usr/local/bin/kind
-    mode: '0777'
-- name: Configure kind completion for zsh
-  tags: config
-  ansible.builtin.blockinfile:
-    marker: "# {mark} kind configuration"
-    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_kind"
-    create: true
-    mode: '0700'
-    content: |
-      # Kind configuration
-      source <(kind completion zsh)
+    mode: "0777"
+- name: Ensure kind zsh completion is generated
+  ansible.builtin.command: kind completion zsh
+  register: kind_zsh_completion
+- name: Write the kind zsh completion to the appropriate location
+  ansible.builtin.copy:
+    content: "{{ kind_zsh_completion.stdout }}"
+    dest: "{{ ansible_env.HOME }}/.zsh/completions/_kind"
+    mode: "0777"
+  when: kind_zsh_completion.stdout is defined and kind_zsh_completion.stdout != ""

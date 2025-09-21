@@ -2,7 +2,3 @@
 starship_installer_url: "https://starship.rs/install.sh"
 starship_install_path: /usr/local/bin
 starship_config_file: "{{ ansible_env.HOME }}/.config/starship.toml"
-
-# ZSH Configurations
-starship_zsh_hook_file: "{{ ansible_env.HOME }}/.config/zsh/plugins/starship.zsh"
-starship_zsh_completions_file: "{{ ansible_env.HOME }}/.config/zsh/completions/_starship"

@@ -17,7 +17,7 @@
     src: "{{ kubeseal_download_url | trim | replace(' ', '') }}"
     dest: /usr/local/bin/
     remote_src: true
-    mode: '0777'
+    mode: "0777"
     include:
       - kubeseal
   args:
@@ -29,9 +29,11 @@
     state: present
 - name: Install kubeseal zsh completions
   ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.config/zsh/completions/_kubeseal"
+    path: "{{ ansible_env.HOME }}/.zsh/aliases.zsh"
     create: true
-    mode: '0700'
+    mode: "0700"
     content: |
-      # Adding kse as an alias for kubeseal
-      alias kse=kubeseal
+      if type kubeseal &>/dev/null; then
+        # Adding kse as an alias for kubeseal
+        alias kse=kubeseal
+      fi

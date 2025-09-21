@@ -8,11 +8,10 @@
     creates: "{{ brew_install_path }}/brew"
 - name: Ensure brew is in the PATH
   ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/brew.zsh"
-    create: true
-    mode: '0700'
+    marker: "# {mark} brew configuration"
+    path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
+    mode: "0700"
     content: |
-      # Homebrew
       if [ -x "{{ brew_install_path }}/brew" ]; then
         eval "$({{ brew_install_path }}/brew shellenv)"
       fi

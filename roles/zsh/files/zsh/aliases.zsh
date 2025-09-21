@@ -1,5 +1,5 @@
+#!/usr/bin/env zsh
 # Clipboard Management
-
 paste() {
     local paste_cmd
     local paste_args=()
@@ -17,7 +17,6 @@ paste() {
         echo "No clipboard utility found. Please install xclip, xsel, wl-clipboard, or pbcopy."
         return 1
     fi
-
     "$paste_cmd" "${paste_args[@]}"
 }
 

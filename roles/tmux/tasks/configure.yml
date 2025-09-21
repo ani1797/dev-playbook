@@ -13,10 +13,9 @@
     state: directory
 - name: Ensure tmux configuration gets sourced as plugin in zsh
   ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.config/zsh/plugins/tmux.zsh"
+    path: "{{ ansible_env.HOME }}/.zsh/plugins.zsh"
     content: |
       # Source tmux configuration
       if [ -f "$HOME/.config/tmux/tmux.conf" ]; then
         alias tmux="tmux -f $HOME/.config/tmux/tmux.conf"
       fi
-    create: yes

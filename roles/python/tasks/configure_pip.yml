@@ -3,11 +3,9 @@
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/pip"
     state: directory
-    mode: '0700'
+    mode: "0700"
 - name: Ensure pip configuration file is present
   ansible.builtin.template:
     src: pip.conf.j2
     dest: "{{ ansible_env.HOME }}/.config/pip/pip.conf"
-    mode: '0600'
-  when:
-    - ansible_facts['os_family'] in ['RedHat', 'Debian', 'Darwin']
+    mode: "0600"

@@ -1,18 +1,6 @@
-- name: Ensure zsh is installed (Debian/Ubuntu/WSL)
+- name: Ensure zsh is installed (Debian/Ubuntu/WSL/RedHat/Fedora/Arch)
   become: true
   ansible.builtin.package:
     name: zsh
     state: present
-  when: ansible_os_family == "Debian"
-- name: Ensure zsh is installed (RedHat/Fedora)
-  become: true
-  ansible.builtin.yum:
-    name: zsh
-    state: present
-  when: ansible_os_family == "RedHat"
-- name: Ensure zsh is installed (Arch Linux)
-  become: true
-  community.general.pacman:
-    name: zsh
-    state: present
-  when: ansible_os_family == "Archlinux"
+  when: ansible_os_family != "Darwin" # MacOS comes with zsh pre-installed
