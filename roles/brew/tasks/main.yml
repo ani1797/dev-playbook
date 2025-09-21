@@ -2,6 +2,48 @@
 - name: Loading OS specific variables
   ansible.builtin.include_vars:
     file: "{{ ansible_os_family }}.yml"
+# On Alpine, we need to install some dependencies first
+- name: Ensure dependencies for Homebrew are installed (Alpine)
+  become: true
+  ansible.builtin.package:
+    name:
+      - build-base
+      - curl
+      - file
+      - git
+      - gawk
+      - grep
+      - libffi-dev
+      - musl-dev
+      - openssl-dev
+      - procps
+      - ruby
+      - tar
+      - xz
+      - zlib-dev
+    state: present
+  when: ansible_os_family == "Alpine"
+# On other Linux distributions, we need to install some dependencies first
+- name: Ensure dependencies for Homebrew are installed (Linux)
+  become: true
+  ansible.builtin.package:
+    name:
+      - build-essential
+      - curl
+      - file
+      - git
+      - gawk
+      - grep
+      - libffi-dev
+      - libssl-dev
+      - procps
+      - ruby
+      - tar
+      - xz-utils
+      - zlib1g-dev
+    state: present
+  when: ansible_os_family not in ["Alpine", "Darwin"]
+# Install Homebrew
 - name: Download the homebrew installation script
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
