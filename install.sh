@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+export DEBIAN_FRONTEND=noninteractive
 export NONINTERACTIVE=${NONINTERACTIVE:-true}
 
 detect_os() {
@@ -23,10 +24,10 @@ install_ansible() {
     if ! command -v ansible &> /dev/null; then
         echo "Ansible not found, installing..."
         if [[ "$OS" == "ubuntu" ]]; then
-            sudo apt update && sudo apt upgrade -y
-            sudo apt install -y software-properties-common
+            sudo apt update && sudo apt upgrade -y -qq
+            sudo apt install -y  -qq software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install -y ansible
+            sudo apt install -y -qq ansible
         elif [[ "$OS" == "darwin" ]]; then
             if ! command -v brew &> /dev/null; then
                 echo "Homebrew not found. Installing Homebrew first..."
