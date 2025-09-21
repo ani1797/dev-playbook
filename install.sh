@@ -24,21 +24,24 @@ install_ansible() {
             sudo apt update && sudo apt upgrade -y
             sudo apt install -y software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install -y ansible ansible-lint
+            sudo apt install -y ansible
         elif [[ "$OS" == "darwin" ]]; then
             if ! command -v brew &> /dev/null; then
                 echo "Homebrew not found. Installing Homebrew first..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             fi
-            brew install ansible ansible-lint
+            brew install ansible
         elif [[ "$OS" == "rocky" || "$OS" == "almalinux" ]]; then
             sudo dnf install -y epel-release
             sudo dnf install -y ansible
         elif [[ "$OS" == "centos" || "$OS" == "rhel" || "$OS" == "fedora" ]]; then
-            sudo yum install -y ansible ansible-lint
+            sudo yum install -y ansible
         elif [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
             sudo pacman -Syu --noconfirm
-            sudo pacman -S --noconfirm ansible ansible-lint
+            sudo pacman -S --noconfirm ansible
+        elif [[ "$OS" == "alpine" ]]; then
+            sudo apk update
+            sudo apk add ansible
         else
             echo "Unsupported OS: $OS"
             exit 1
