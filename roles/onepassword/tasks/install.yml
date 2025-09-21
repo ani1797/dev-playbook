@@ -3,21 +3,27 @@
   ansible.builtin.get_url:
     url: "https://cache.agilebits.com/dist/1P/op2/pkg/{{ onepassword_version }}/op_linux_amd64_{{ onepassword_version }}.zip"
     dest: "/tmp/op_linux_amd64_{{ onepassword_version }}.zip"
-    mode: '0644'
+    mode: "0644"
+  when: ansible_os_family != "Darwin"
+- name: Ensure unzip is installed (Linux)
+  become: true
+  ansible.builtin.package:
+    name: unzip
+    state: present
   when: ansible_os_family != "Darwin"
 - name: Unzip the onepassword CLI
   ansible.builtin.unarchive:
     src: "/tmp/op_linux_amd64_{{ onepassword_version }}.zip"
     dest: /tmp
     remote_src: true
-    mode: '0755'
+    mode: "0755"
   when: ansible_os_family != "Darwin"
 - name: Move the onepassword CLI to /usr/local/bin
   become: true
   ansible.builtin.copy:
     src: /tmp/op
     dest: /usr/local/bin
-    mode: '0755'
+    mode: "0755"
     remote_src: true
   when: ansible_os_family != "Darwin"
 - name: Ensure the onepassword CLI is installed (MacOS)
