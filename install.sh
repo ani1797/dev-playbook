@@ -23,10 +23,16 @@ install_ansible() {
     if ! command -v ansible &> /dev/null; then
         echo "Ansible not found, installing..."
         if [[ "$OS" == "ubuntu" ]]; then
-            sudo apt update && sudo apt upgrade -y -qq
+            sudo apt update && sudo DEBIAN_FRONTEND=noninteractive \
+                apt-get -o Dpkg::Options::="--force-confdef" \
+                -o Dpkg::Options::="--force-confold" \
+                -y upgrade -qq
             sudo DEBIAN_FRONTEND=noninteractive apt install -y  -qq software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo DEBIAN_FRONTEND=noninteractive apt install -y -qq ansible
+            sudo DEBIAN_FRONTEND=noninteractive \
+                apt-get -o Dpkg::Options::="--force-confdef" \
+                -o Dpkg::Options::="--force-confold" \
+                 install -y -qq ansible
         elif [[ "$OS" == "darwin" ]]; then
             if ! command -v brew &> /dev/null; then
                 echo "Homebrew not found. Installing Homebrew first..."
