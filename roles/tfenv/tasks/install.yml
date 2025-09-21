@@ -3,3 +3,4 @@
   community.general.homebrew:
     name: tfenv
     state: present
+  when: ansible_os_family not in ["Alpine", "Windows"]
