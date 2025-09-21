@@ -3,6 +3,7 @@ kubernetes_os_map:
   Darwin: darwin
   Archlinux: linux
   RedHat: linux
+  Alpine: linux
 kubernetes_installs:
   - kubectl
   - k9s
