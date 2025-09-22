@@ -1,26 +1,76 @@
-# Use Ctrl-a instead of default Ctrl-b for commands
-unbind C-b
+############################################
+###            GENERAL CHANGES           ###
+############################################
 
-set-option -g prefix C-a
-bind-key C-a send-prefix
+# Reloads the configuration on <prefix>+r key
+bind-key r source-file "$DOTFILES/tmux/tmux.conf"
 
-# Set mouse mode (allows scrolling, selecting panes, etc.)
+# Open the tmux configuration in a horizontal split
+bind-key m splitw -h "vim $DOTFILES/tmux/tmux.conf"
+
+# Enable mouse control (clickable windows, panes, resizable panes)
 set -g mouse on
 
-# Split panes using | and -
-bind | split-window -h
-bind - split-window -v
-unbind '"'
-unbind %
+# don't rename windows automatically
+set-option -g allow-rename off
+
+# Confirm before killing
+bind-key k confirm kill-window
+bind-key k confirm kill-server
+
+# toggle statusbar
+bind-key b set-option status
+
+# Process Viewer
+bind-key 'h' splitw -h "exec top"
+
+# Window and Panel Numbering
+set -g base-index 1
+setw -g pane-base-index 1
 
 # Enable 256 color support
 set -g default-terminal "screen-256color"
 
-# Status bar customization
-set -g status-bg black
-set -g status-fg white
-set -g status-left '#[fg=green]#H'
-set -g status-right '#[fg=yellow]%Y-%m-%d %H:%M'
-
 # Vi mode in copy mode
 setw -g mode-keys vi
+
+# Session Selector
+bind-key ` command-prompt "rename-session '%%'"
+
+############################################
+###              KEYMAPPINGS             ###
+############################################
+
+## Prefix Key Update
+unbind C-b # unset bind-key (Ctrl + B) 
+# set-option -g prefix C-@ # Setting the prefix to (Ctrl + Space)
+# bind-key C-@ send-prefix # Setting the prefix to (Ctrl + Space)
+
+set-option -g prefix C-a # Use Ctrl-a instead of default Ctrl-b for commands
+bind-key C-a send-prefix
+
+## Pane Creation/Deletion
+bind \\ split-window -h # Binding <prefix> + \ to split window horizontally (I prefered it because key used by \ is also used by | and | shows how it will split out window)
+bind - split-window -v  # Binding <prefix> + - to split window vertically
+bind End kill-pane      # Binding <prefix> + End to kill the current-pane without prompt
+unbind '"'
+unbind %
+
+# Pane Navigation
+bind -n M-Left select-pane -L  # Binding Alt + <- without prefix navigates to left panel
+bind -n M-Right select-pane -R # Binding Alt + -> without prefix navigates to right panel
+bind -n M-Up select-pane -U    # Binding Alt + Up without prefix navigates to up panel
+bind -n M-Down select-pane -D  # Binding Alt + Down without prefix navigates to up panel
+
+
+############################################
+###                STYLING               ###
+############################################
+
+# Status Bar
+set -g status-bg black # Set status bar background to black
+set -g status-fg white # Set status bar background to white
+set -g status-justify centre # Set status bar windw indicator to justify center
+bind-key b set-option status  # Binding <prefix> + b to hide status bar
+set -g status-left '#[fg=green]#H'
+set -g status-right '#[fg=yellow]%Y-%m-%d %H:%M'
