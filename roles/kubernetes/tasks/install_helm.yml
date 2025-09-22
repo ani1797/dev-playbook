@@ -45,6 +45,4 @@
       if type helm &>/dev/null; then
         # Configuring helm alias to point to helm
         alias h=helm
-        # Assign completion for helm alias to helm completion
-        compdef h=helm
       fi

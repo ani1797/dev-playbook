@@ -19,6 +19,4 @@
       if type kubectl &>/dev/null; then
         # Configuring alias for kubectl
         alias k=kubectl
-        # Assign completion for kubectl alias
-        compdef k=kubectl
       fi
