@@ -47,3 +47,9 @@ zmodload zsh/zprof
 if [ -r "$HOME/.zshenv.local" ]; then
   source "$HOME/.zshenv.local"
 fi
+
+# Enabling ssh agent for zsh sessions
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+    eval `ssh-agent -s`
+    clear
+fi

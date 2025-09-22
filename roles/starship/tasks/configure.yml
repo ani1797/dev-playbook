@@ -1,10 +1,5 @@
 ---
 # Find existing starship installation
-- name: Find the starship binary
-  register: starship_path
-  changed_when: false
-  ansible.builtin.command: which starship
-  failed_when: starship_path.rc not in [0,1]
 # Find all the available presets if a preset is requested
 - name: Check for available theme presets
   register: starship_presets
@@ -51,15 +46,12 @@
       if type starship &>/dev/null; then
         eval "$(starship init zsh)"
       fi
-  when: starship_path.rc == 0
 # Set up completions for zsh if starship is installed
 - name: Get the starship completion script
   ansible.builtin.command: "{{ starship_install_path }}/starship completions zsh"
   register: starship_completions
-  when: starship_path.rc == 0
 - name: Ensure starship completions for zsh is installed
   ansible.builtin.copy:
     content: "{{ starship_completions.stdout }}"
     dest: "{{ ansible_env.HOME }}/.zsh/completions/_starship"
     mode: 0700
-  when: starship_path.rc == 0 and starship_completions.stdout is defined
