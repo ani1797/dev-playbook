@@ -52,6 +52,7 @@ work:
       ansible_user: aggaani
       python_pip_primary_index: mfc-ca
       nerdfonts_enabled: false
+      iximiuz_enabled: true
       python_pip_remotes:
         - name: pypi
           url: https://pypi.org/simple
