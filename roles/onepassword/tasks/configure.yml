@@ -10,6 +10,31 @@
     mode: "0700"
     content: "{{ onepassword_zsh_completion.stdout }}"
   when: ansible_os_family != "Darwin"
+- name: Ensure onepassword aliases and shortcuts are configured
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zsh/aliases.zsh"
+    marker: "# {mark} onepassword aliases"
+    create: true
+    mode: "0777"
+    block: |
+      # OnePassword
+      alias oplogin='eval $(op signin)'
+      opkey() {
+          # Start ssh-agent if not already running
+          if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+              eval "$(ssh-agent -s)"
+          fi
+          # Login to 1Password
+          eval "$(op signin)" >/dev/null 2>&1
+          # Get all SSH private key references from 1Password
+          keys=$(op item list --categories SSHKey --format json | jq -r 'map("op://\(.vault.name)/\(.id)/private_key?ssh-format=openssh") | .[]')
+
+          # Loop through each key and add it to ssh-agent
+          while IFS= read -r key; do
+              echo "Adding key: $key"
+              op read "$key" | ssh-add - >/dev/null
+          done <<< "$keys"
+      }
 - name: Detect the direnv plugins directory
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.config/direnv/lib"
